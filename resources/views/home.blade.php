@@ -190,7 +190,7 @@
                                             <h5 class="ec-pro-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->name}}</a></h5>
                                             <div class="ec-pro-rat-price">
                                                 <span class="ec-price">
-                                                        <span class="new-price">Rp. {{number_format($product->price)}}</span>
+                                                        <span class="new-price">Rp. {{number_format($product->stockProduct->where('size', 60)->first()->price)}}</span>
                                                     </span>
                                             </div>
                                         </div>
