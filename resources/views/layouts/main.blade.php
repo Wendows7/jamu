@@ -6,15 +6,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Jamu</title>
+    <title>Jamu Niswah</title>
     <meta name="keywords" content="apparel, catalog, clean, ecommerce, ecommerce HTML, electronics, fashion, html eCommerce, html store, minimal, multipurpose, multipurpose ecommerce, online store, responsive ecommerce template, shops" />
     <meta name="description" content="Best ecommerce html template for single and multi vendor store.">
     <meta name="author" content="ashishmaraviya">
 
     <!-- site Favicon -->
-    <link rel="icon" href="{{asset('assets/images/favicon/favicon-6.png')}}" sizes="32x32" />
-    <link rel="apple-touch-icon" href="{{asset('assets/images/favicon/favicon-6.png')}}" />
-    <meta name="msapplication-TileImage" content="{{asset('assets/images/favicon/favicon-6.png')}}" />
+    <link rel="icon" href="{{asset('img/logo.png')}}" sizes="32x32" />
+    <link rel="apple-touch-icon" href="{{asset('img/logo.png')}}" />
+    <meta name="msapplication-TileImage" content="{{asset('img/logo.png')}}" />
 
     <!-- css Icon Font -->
     <link rel="stylesheet" href="{{asset('assets/css/vendor/ecicons.min.css')}}" />

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/detail/{product}', [ProductController::class, 'detail'])->name('products.detail');
+Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+
 Route::post('/addToCart', [CartController::class, 'addToCart'])->name('cart.addToCart');
 Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');

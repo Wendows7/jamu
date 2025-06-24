@@ -19,8 +19,8 @@
                     <!-- Ec Header Search Start -->
                     <div class="align-self-center ec-header-search">
                         <div class="header-search">
-                            <form class="ec-search-group-form" action="#">
-                                <input class="form-control" placeholder="Search Your Products..." type="text">
+                            <form class="ec-search-group-form" action="{{ route('products.search') }}" method="get">
+                                <input class="form-control" placeholder="Search Your Products..." type="text" name="slug">
                                 <button class="search_submit" type="submit"><i class="fi-rr-search"></i></button>
                             </form>
                         </div>

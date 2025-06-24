@@ -113,8 +113,7 @@
                     <!-- Footer Copyright Start -->
                     <div class="footer-copy">
                         <div class="footer-bottom-copy ">
-                            <div class="ec-copy">Copyright © <span id="copyright_year"></span> <a class="site-name" href="index.html">Ekka</a> all
-                                rights reserved. Powered by Ekka</div>
+                            <div class="ec-copy">Copyright © <span id="copyright_year"></span> <a class="site-name" href="{{route('home')}}">Jamu Niswah</a></div>
                         </div>
                     </div>
                     <!-- Footer Copyright End -->

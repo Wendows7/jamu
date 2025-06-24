@@ -76,7 +76,7 @@
                     <div class="ec-product-tp">
                         <div class="ec-product-image">
                             <a href="{{route('products.detail', ['product' => $product->id])}}">
-                                <img src="{{$product->image}}" class="img-center" alt="">
+                                <img src="{{asset($product->image)}}" class="img-center" alt="">
                             </a>
                             <div class="ec-link-icon">
                                 <a href="{{route('products.detail', ['product' => $product->id])}}" data-tip="Quick View"><button><i class="fi-rr-eye"></i></button></a>

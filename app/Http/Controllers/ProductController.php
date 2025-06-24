@@ -60,6 +60,6 @@ class ProductController extends Controller
         if ($products->isEmpty()) {
             return redirect()->back()->with('error', 'Product not found');
         }
-        return view('products.main', compact('products','totalProduct','totalProductByCategory'));
+        return view('products.index', compact('products','totalProduct','totalProductByCategory'));
     }
 }
