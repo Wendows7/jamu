@@ -31,7 +31,7 @@
                     <div class="align-self-center">
                         <div class="ec-header-bottons">
                             <!-- Header User Start -->
-                            <a href="login.html" class="ec-header-btn ec-header-user">
+                            <a href="{{route('auth.login')}}" class="ec-header-btn ec-header-user">
                                 <div class="header-icon"><i class="fi-rr-user"></i></div>
                                 <div class="ec-btn-desc">
                                     <span class="ec-btn-title">Account</span>
@@ -39,7 +39,6 @@
                                 </div>
                             </a>
                             <!-- Header User End -->
-
                             <!-- Header Cart Start -->
                             <a href="#ec-side-cart" class="ec-header-btn ec-side-toggle">
                                 <div class="header-icon"><i class="fi-rr-shopping-basket"></i></div>
@@ -53,6 +52,17 @@
                                 </div>
                             </a>
                             <!-- Header Cart End -->
+
+                            @can('user')
+{{--                            make button logout--}}
+                            <form action="{{route('logout')}}" method="POST" class="ec-header-btn ec-header-logout">
+                                @csrf
+                                <button type="submit" class="header-icon"><i class="fi-rr-sign-out-alt"></i>
+{{--                                    <span class="ec-btn-title">Exit</span><br>--}}
+                                    <span class="ec-btn-stitle">Logout</span>
+                                </button>
+                            </form>
+                            @endcan
                         </div>
                     </div>
                 </div>
