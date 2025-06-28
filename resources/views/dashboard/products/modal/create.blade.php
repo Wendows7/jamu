@@ -67,10 +67,10 @@
                                         <input type="text" name="sizes[]" class="form-control" required>
                                     </td>
                                     <td>
-                                        <input type="number" name="stocks[]" class="form-control" min="0" required>
+                                        <input type="number" name="price[]" class="form-control" min="0" required>
                                     </td>
                                     <td>
-                                        <input type="number" name="price[]" class="form-control" min="0" required>
+                                        <input type="number" name="stocks[]" class="form-control" min="0" required>
                                     </td>
                                 </tr>
                                 </tbody>
