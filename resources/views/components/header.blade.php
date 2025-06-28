@@ -173,7 +173,7 @@
                     <!-- Ec Header Logo Start -->
                     <div class="col ec-header-logo">
                         <div class="header-logo">
-                            <a href="index.html"><img src="{{asset('img/logo.png')}}" alt="Site Logo" /><img class="dark-logo" src="{{asset('img/logo.png')}}" alt="Site Logo" style="display: none;" /></a>
+                            <a href="{{route('home')}}"><img src="{{asset('img/logo.png')}}" alt="Site Logo" /><img class="dark-logo" src="{{asset('img/logo.png')}}" alt="Site Logo" style="display: none;" /></a>
                         </div>
                     </div>
                 </div>

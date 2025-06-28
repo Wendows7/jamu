@@ -118,8 +118,10 @@ class CartController extends Controller
         $paymentMethod = session('payment_method');
         $orderCode = session('orderCode');
         $totalPrice = session('totalPrice');
+        $totalProductByCategory = $this->productService->getTotalProductByCategory();
 
-        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice'));
+
+        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice', 'totalProductByCategory'));
     }
 
     public function buyNow(Request $request)
@@ -131,6 +133,7 @@ class CartController extends Controller
 
     public function OrderDetail()
     {
+        $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $orderCode = request()->route('orderCode');
         if (!$orderCode) {
             return redirect()->route('products')->with('error', 'No order code found!');
@@ -142,7 +145,7 @@ class CartController extends Controller
         $transactionsData = $this->transactionService->getByOrderId($orderData->id);
         $paymentData = $this->paymentService->getPayment();
 
-        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData'));
+        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData', 'totalProductByCategory'));
     }
 
     public function addPaymentProof(Request $request)
