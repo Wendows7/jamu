@@ -211,7 +211,7 @@
         <div class="cart-title">Keranjang Saya</div>
         <form action="{{route('cart.checkout')}}" method="POST">
             @csrf
-            <input type="hidden" name="user_id" value="1">
+            <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
             <table class="cart-table">
                 <thead>
                 <tr>

@@ -53,7 +53,7 @@ class OrderService
 
     public function getOrderDataByUserId($userId)
     {
-        $orderData = $this->orderService->where('user_id', $userId)->with('transactions')->latest()->get();
+        $orderData = $this->orderService->where('user_id', $userId)->with('transactions', 'payment')->latest()->get();
         $data = collect($orderData)->map(function ($order) {
             return [
                 'order_code' => $order->order_code,
@@ -61,7 +61,7 @@ class OrderService
                 'total_price' => $order->total_price,
                 'created_at' => $order->created_at,
                 'transactions' => $this->transactionService->where('order_id', $order->id)->with('product')->get(),
-                'payment' => $this->paymentService->where('order_id', $order->id)->get(),
+                'payment' => $order->payment->name ?? null,
             ];
         });
 
@@ -114,7 +114,7 @@ class OrderService
 
     public function getOrderData()
     {
-        $orderData = $this->orderService->latest()->with('transactions','user')->get();
+        $orderData = $this->orderService->latest()->with('transactions','user','payment')->get();
         $data = collect($orderData)->map(function ($order) {
             return [
                 'order_code' => $order->order_code,
@@ -122,7 +122,8 @@ class OrderService
                 'total_price' => $order->total_price,
                 'created_at' => $order->created_at,
                 'transactions' => $this->transactionService->where('order_id', $order->id)->with('product')->get(),
-                'payment' => $this->paymentService->where('order_id', $order->id)->get(),
+                'payment' => $order->payment->name ?? null,
+                'payment_proof' => $order->payment_proof,
                 'user' => $order->user,
             ];
         });

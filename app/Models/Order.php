@@ -11,7 +11,8 @@ class Order extends Model
         'user_id',
         'status',
         'total_price',
-        'payment_proof'
+        'payment_proof',
+        'payment_id'
     ];
 
     public function user()
@@ -33,8 +34,8 @@ class Order extends Model
     {
         return $this->hasManyThrough(Product::class, OrderDetail::class);
     }
-    public function payments()
+    public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsTo(Payment::class);
     }
 }

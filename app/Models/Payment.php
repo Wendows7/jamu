@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = ["name","order_id"];
+    protected $fillable = ["name",'number'];
+
+    public $timestamps = false;
 
     public function orders()
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->hasMany(Order::class);
     }
 }

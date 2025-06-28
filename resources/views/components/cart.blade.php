@@ -88,7 +88,7 @@
                                     <div class="cart-item-qty">
                                         <button type="button" class="cart-qty-minus">-</button>
                                         <input class="cart-qty-input" type="text" name="quantity" value="{{$cart['quantity']}}">
-                                        <input type="hidden" name="user_id" value="1">
+                                        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
                                         <button type="button" class="cart-qty-plus">+</button>
                                     </div>
                                     <a href="#" class="remove">×</a>

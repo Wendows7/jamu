@@ -52,7 +52,34 @@
             background-color: #f7f7f7;
             color: #ccc;
         }
+        .ec-add-to-cart {
+            width: 100%;
+            /*margin-top: 10px;*/
+            /*padding: 8px 15px;*/
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #ffffff;
+            background-color: #FF8C00;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s ease 0s;
+        }
 
+        .ec-add-to-cart:hover {
+            background-color: #e67e00;
+            box-shadow: 0px 0px 10px 0px rgba(255, 140, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .ec-add-to-cart:active {
+            transform: translateY(0);
+        }
+
+        .ec-pro-content form {
+            width: 100%;
+            margin-top: 5px;
+        }
 
     </style>
 
@@ -69,37 +96,95 @@
                     </div>
                 </div>
             </div>
+{{--            <div class="row">--}}
+{{--                @foreach($products as $product)--}}
+{{--                    <div class="col-lg-3 col-md-6 col-sm-6">--}}
+{{--                        <!-- START single card -->--}}
+{{--                        <div class="ec-product-tp">--}}
+{{--                            <div class="ec-product-image">--}}
+{{--                                <a href="{{route('products.detail', ['product' => $product->id])}}">--}}
+{{--                                    <img src="{{asset($product->image)}}" class="img-center" alt="">--}}
+{{--                                </a>--}}
+{{--                                <div class="ec-link-icon">--}}
+{{--                                    <a href="{{route('products.detail', ['product' => $product->id])}}" data-tip="Quick View"><button><i class="fi-rr-eye"></i></button></a>--}}
+{{--                                    <form action="{{ route('cart.addToCart') }}" method="POST" style="display:inline;">--}}
+{{--                                        @csrf--}}
+{{--                                        <input type="hidden" name="product_id" value="{{ $product->id }}">--}}
+{{--                                        <input type="hidden" name="quantity" value="1">--}}
+{{--                                        <input type="hidden" name="size" value="60">--}}
+{{--                                        <a href="#">--}}
+{{--                                            <button type="submit">--}}
+{{--                                                <i class="fi-rr-shopping-basket"></i>--}}
+{{--                                            </button>--}}
+{{--                                        </a>--}}
+{{--                                    </form>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="ec-product-body">--}}
+{{--                                <h3 class="ec-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->name}}</a></h3>--}}
+{{--                                <p class="ec-description">--}}
+{{--                                    {{$product->category->name}}--}}
+{{--                                </p>--}}
+{{--                                <div class="ec-price">Rp.{{number_format($product->stockProduct->where('size', 60)->first()->price)}}</div>--}}
+{{--                                <div class="ec-link-btn">--}}
+{{--                                    <form action="{{ route('cart.addToCart') }}" method="POST" style="display:inline;">--}}
+{{--                                        @csrf--}}
+{{--                                        <input type="hidden" name="product_id" value="{{ $product->id }}">--}}
+{{--                                        <input type="hidden" name="quantity" value="1">--}}
+{{--                                        <input type="hidden" name="size" value="60">--}}
+
+{{--                                        <button type="submit"--}}
+{{--                                                class="btn ec-add-to-cart"--}}
+{{--                                                data-toggle="tooltip"--}}
+{{--                                                data-placement="top"--}}
+{{--                                                title="Add to Cart">Add To Cart--}}
+{{--                                        </button>--}}
+{{--                                    </form>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
             <div class="row">
                 @foreach($products as $product)
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <!-- START single card -->
-                    <div class="ec-product-tp">
-                        <div class="ec-product-image">
-                            <a href="{{route('products.detail', ['product' => $product->id])}}">
-                                <img src="{{asset($product->image)}}" class="img-center" alt="">
-                            </a>
-                            <div class="ec-link-icon">
-                                <a href="{{route('products.detail', ['product' => $product->id])}}" data-tip="Quick View"><button><i class="fi-rr-eye"></i></button></a>
-                                <form action="{{ route('cart.addToCart') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <input type="hidden" name="size" value="60">
-                                    <a href="#">
-                                    <button type="submit">
-                                        <i class="fi-rr-shopping-basket"></i>
-                                    </button>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-5 ec-product-content">
+                        <div class="ec-product-inner">
+                            <div class="ec-pro-image-outer">
+                                <div class="ec-pro-image">
+                                    <a href="{{route('products.detail', ['product' => $product->id])}}" class="image">
+                                                        <span class="label veg">
+                                                            <span class="dot"></span>
+                                                        </span>
+                                        <img class="main-image"
+                                             src="{{asset($product->image)}}" alt="Product" />
                                     </a>
-                                </form>
+                                    <div class="ec-pro-actions">
+                                        <a href="{{route('products.detail', ['product' => $product->id])}}" data-tip="Quick View"><button><i class="fi-rr-eye"></i></button></a>
+                                        <form action="{{ route('cart.addToCart') }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <input type="hidden" name="size" value="60">
+                                            <a href="#">
+                                                <button type="submit">
+                                                    <i class="fi-rr-shopping-basket"></i>
+                                                </button>
+                                            </a>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ec-product-body">
-                            <h3 class="ec-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->name}}</a></h3>
-                            <p class="ec-description">
-                                {{$product->category->name}}
-                            </p>
-                            <div class="ec-price">Rp.{{number_format($product->stockProduct->where('size', 60)->first()->price)}}</div>
-                            <div class="ec-link-btn">
+                            <div class="ec-pro-content">
+                                <a href="{{route('products.detail', ['product' => $product->id])}}"><h6 class="ec-pro-stitle">{{$product->category->name}}</h6></a>
+                                <h5 class="ec-pro-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->name}}</a></h5>
+                                <div class="ec-pro-rat-price">
+        <span class="ec-price">
+            <span class="new-price">Rp. {{number_format($product->stockProduct->first()->price)}}</span>
+        </span>
+                                </div>
+
                                 <form action="{{ route('cart.addToCart') }}" method="POST" style="display:inline;">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -115,10 +200,9 @@
                                 </form>
                             </div>
                         </div>
-
                     </div>
-                </div>
                 @endforeach
+
             </div>
             {{$products->links('components.pagination')}}
         </div>

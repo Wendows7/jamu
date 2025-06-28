@@ -54,6 +54,13 @@
                             <!-- Header Cart End -->
 
                             @can('user')
+                                <a href="{{route('user.orders')}}" class="ec-header-btn ec-header-user">
+                                    <div class="header-icon"><i class="fi-rr-book-open-reader"></i></div>
+                                    <div class="ec-btn-desc">
+                                        <span class="ec-btn-title">Order</span>
+                                        <span class="ec-btn-stitle">History</span>
+                                    </div>
+                                </a>
 {{--                            make button logout--}}
                             <form action="{{route('logout')}}" method="POST" class="ec-header-btn ec-header-logout">
                                 @csrf

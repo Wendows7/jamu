@@ -104,7 +104,6 @@ class ProductService
         $validateData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|int',
             'image' => 'image|file|max:2024',
             'image_2' => 'image|file|max:2024',
             'image_3' => 'image|file|max:2024',
@@ -131,6 +130,7 @@ class ProductService
             $stockIds = $request->input('stock_ids');
             $sizes = $request->input('sizes');
             $stocks = $request->input('stocks');
+            $price = $request->input('price');
 
             foreach ($stockIds as $i => $stockId) {
                 $stockProduct = $product->stockProduct()->find($stockId);
@@ -138,6 +138,7 @@ class ProductService
                     $stockProduct->update([
                         'size' => $sizes[$i],
                         'stock' => $stocks[$i],
+                        'price' => $price[$i] // Assuming price is also part of the stock
                     ]);
                 }
             }
@@ -152,7 +153,7 @@ class ProductService
         $validateData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|int',
+            'price' => 'required|array',
             'image_1' => 'image|file|max:2024',
             'image_2' => 'image|file|max:2024',
             'image_3' => 'image|file|max:2024',
@@ -182,10 +183,12 @@ class ProductService
         // Create sizes & stocks
         $sizes = $request->input('sizes');
         $stocks = $request->input('stocks');
+        $price = $request->input('price');
         foreach ($sizes as $i => $size) {
             $product->stockProduct()->create([
                 'size' => $size,
                 'stock' => $stocks[$i] ?? 0,
+                'price' => $price[$i] ?? 0,
             ]);
         }
 
@@ -204,8 +207,8 @@ class ProductService
         // Create image instance and resize
         $img = Image::read($file->getRealPath());
 //        check if the size is 335x335, if not resize it
-        if ($img->width() != 335 || $img->height() != 335) {
-            $img->cover(335, 335);
+        if ($img->width() != 800 || $img->height() != 700) {
+            $img->cover(800, 700);
         }
 
         // Save the resized image

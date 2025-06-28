@@ -148,7 +148,7 @@ class CartController extends Controller
     public function addPaymentProof(Request $request)
     {
         $this->orderService->updateOrderProof($request);
-        return redirect()->route('products')
+        return redirect()->route('user.orders')
             ->with('success', 'Berhasil mengunggah bukti pembayaran, silakan tunggu konfirmasi dari admin.');
     }
 

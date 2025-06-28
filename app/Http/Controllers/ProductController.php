@@ -19,7 +19,7 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $products = $this->product->getAllProducts()->paginate(8);
+        $products = $this->product->getAllProducts()->paginate(10);
         $totalProduct = $this->product->getTotalProduct();
         $totalProductByCategory = $this->product->getTotalProductByCategory();
         return view('products.index', compact('products', 'totalProduct', 'totalProductByCategory'));
