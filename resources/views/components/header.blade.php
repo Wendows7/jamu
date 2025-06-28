@@ -10,7 +10,7 @@
                     <div class="align-self-center ec-header-logo">
                         <div class="header-logo">
                             <a href="index.html"><img src="{{asset('img/logo.png')}}" alt="Site Logo" /><img
-                                    class="dark-logo" src="{{asset('assets/images/logo/dark-logo-6.png')}}" alt="Site Logo"
+                                    class="dark-logo" src="{{asset('img/logo.png')}}" alt="Site Logo"
                                     style="display: none;" /></a>
                         </div>
                     </div>
@@ -30,15 +30,27 @@
                     <!-- Ec Header Button Start -->
                     <div class="align-self-center">
                         <div class="ec-header-bottons">
+                            @if(auth()->check())
                             <!-- Header User Start -->
                             <a href="{{route('auth.login')}}" class="ec-header-btn ec-header-user">
                                 <div class="header-icon"><i class="fi-rr-user"></i></div>
                                 <div class="ec-btn-desc">
                                     <span class="ec-btn-title">Account</span>
-                                    <span class="ec-btn-stitle">Login</span>
+                                    <span class="ec-btn-stitle">Profile</span>
                                 </div>
                             </a>
                             <!-- Header User End -->
+                            @else
+                                <!-- Header User Start -->
+                                <a href="{{route('auth.login')}}" class="ec-header-btn ec-header-user">
+                                    <div class="header-icon"><i class="fi-rr-user"></i></div>
+                                    <div class="ec-btn-desc">
+                                        <span class="ec-btn-title">Account</span>
+                                        <span class="ec-btn-stitle">Login</span>
+                                    </div>
+                                </a>
+                                <!-- Header User End -->
+                            @endif
                             <!-- Header Cart Start -->
                             <a href="#ec-side-cart" class="ec-header-btn ec-side-toggle">
                                 <div class="header-icon"><i class="fi-rr-shopping-basket"></i></div>
@@ -89,20 +101,32 @@
                     <li><a href="{{route('products')}}">Products</a></li>
                     <li><a href="{{route('products')}}">Contact</a></li>
                     <li><a href="{{route('products')}}">About</a></li>
+                    @can('user')
+                    <li><a href="{{route('user.orders')}}">Order History</a></li>
+                    @endcan
                 </ul>
             </div>
             <div class="header-res-lan-curr">
+                @can('user')
+                <form action="{{route('logout')}}" method="POST" class="ec-header-btn ec-header-logout">
+                    @csrf
+                    <button type="submit" class="header-icon"><i class="fi-rr-sign-out-alt"></i>
+                        <span class="btn-black">Logout</span>
+                    </button>
+                </form>
+                @endcan
+
                 <!-- Social Start -->
-                <div class="header-res-social">
-                    <div class="header-top-social">
-                        <ul class="mb-0">
-                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-facebook"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-instagram"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-linkedin"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+{{--                <div class="header-res-social">--}}
+{{--                    <div class="header-top-social">--}}
+{{--                        <ul class="mb-0">--}}
+{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-facebook"></i></a></li>--}}
+{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-twitter"></i></a></li>--}}
+{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-instagram"></i></a></li>--}}
+{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-linkedin"></i></a></li>--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <!-- Social End -->
             </div>
         </div>
@@ -149,15 +173,15 @@
                     <!-- Ec Header Logo Start -->
                     <div class="col ec-header-logo">
                         <div class="header-logo">
-                            <a href="index.html"><img src="assets/images/logo/logo-6.png" alt="Site Logo" /><img class="dark-logo" src="assets/images/logo/dark-logo-6.png" alt="Site Logo" style="display: none;" /></a>
+                            <a href="index.html"><img src="{{asset('img/logo.png')}}" alt="Site Logo" /><img class="dark-logo" src="{{asset('img/logo.png')}}" alt="Site Logo" style="display: none;" /></a>
                         </div>
                     </div>
                 </div>
                 <!-- Ec Header Search Start -->
                 <div class="col align-self-center ec-header-search">
                     <div class="header-search">
-                        <form class="ec-search-group-form" action="#">
-                            <input class="form-control" placeholder="Search Your Products..." type="text">
+                        <form class="ec-search-group-form" action="{{ route('products.search') }}" method="get">
+                            <input class="form-control" placeholder="Search Your Products..." type="text" name="slug">
                             <button class="search_submit" type="submit"><i class="fi-rr-search"></i></button>
                         </form>
                     </div>

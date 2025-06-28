@@ -195,7 +195,7 @@
                 <a href="{{route('home')}}" class="ec-header-btn"><i class="fi-rr-home"></i></a>
             </div>
             <div class="ec-nav-panel-icons">
-                <a href="login.html" class="ec-header-btn"><i class="fi-rr-user"></i></a>
+                <a href="{{route('auth.login')}}" class="ec-header-btn"><i class="fi-rr-user"></i></a>
             </div>
         </div>
     </div>

@@ -7,12 +7,10 @@
                         <div class="ec-footer-widget">
                             <h4 class="ec-footer-heading">Popular Categories</h4>
                             <div class="ec-footer-links">
-                                <ul class="align-items-center">
-                                    <li class="ec-footer-link"><a href="#">Fashion</a></li>
-                                    <li class="ec-footer-link"><a href="#">Electronic</a></li>
-                                    <li class="ec-footer-link"><a href="#">Cosmetic</a></li>
-                                    <li class="ec-footer-link"><a href="#">Health</a></li>
-                                    <li class="ec-footer-link"><a href="#">Watches</a></li>
+                            <ul class="align-items-center">
+                                @foreach($totalProductByCategory as $value)
+                                    <li class="ec-footer-link"><a href="{{ route('products.search', ['slug' => $value['name']]) }}">{{$value['name']}}</a></li>
+                                @endforeach
                                 </ul>
                             </div>
                         </div>
