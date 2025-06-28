@@ -58,6 +58,22 @@
 {{--                            </div>--}}
 {{--                        </div>--}}
                     </div>
+                    <div class="bg-white rounded-3 p-3 shadow-sm mb-3">
+                        <div class="mb-2 fw-semibold">Bukti Pembayaran</div>
+                        <div class="text-center">
+                            @if(isset($order['payment']) && $order['payment_proof'])
+                                <img src="{{ asset($order['payment_proof']) }}"
+                                     class="img-fluid rounded"
+                                     style="max-height: 200px; cursor: pointer;"
+                                     onclick="window.open(this.src, '_blank')"
+                                     alt="Bukti Pembayaran">
+                            @else
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="bi bi-exclamation-circle me-2"></i>Bukti pembayaran belum diunggah.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="bg-white rounded-3 p-3 shadow-sm">
                         <div class="mb-2 fw-semibold">Order Items</div>
                         <div style="max-height:220px;overflow-y:auto;">

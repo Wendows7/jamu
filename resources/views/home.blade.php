@@ -186,8 +186,8 @@
                                             </div>
                                         </div>
                                         <div class="ec-pro-content">
-                                            <a href="{{route('products.detail', ['product' => $product->id])}}"><h6 class="ec-pro-stitle">{{$product->category->name}}</h6></a>
-                                            <h5 class="ec-pro-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->name}}</a></h5>
+                                            <a href="{{route('products.detail', ['product' => $product->id])}}"><h6 class="ec-pro-stitle">{{$product->name}}</h6></a>
+                                            <h5 class="ec-pro-title"><a href="{{route('products.detail', ['product' => $product->id])}}">{{$product->category->name}}</a></h5>
                                             <div class="ec-pro-rat-price">
                                                 <span class="ec-price">
                                                         <span class="new-price">Rp. {{number_format($product->stockProduct->first()->price)}}</span>

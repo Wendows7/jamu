@@ -61,6 +61,7 @@ class OrderService
                 'total_price' => $order->total_price,
                 'created_at' => $order->created_at,
                 'transactions' => $this->transactionService->where('order_id', $order->id)->with('product')->get(),
+                'payment_proof' => $order->payment_proof,
                 'payment' => $order->payment->name ?? null,
             ];
         });
