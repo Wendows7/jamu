@@ -117,16 +117,16 @@
                 @endcan
 
                 <!-- Social Start -->
-{{--                <div class="header-res-social">--}}
-{{--                    <div class="header-top-social">--}}
-{{--                        <ul class="mb-0">--}}
-{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-facebook"></i></a></li>--}}
-{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-twitter"></i></a></li>--}}
-{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-instagram"></i></a></li>--}}
-{{--                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-linkedin"></i></a></li>--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <div class="header-res-social">
+                    <div class="header-top-social">
+                        <ul class="mb-0">
+                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-facebook"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-instagram"></i></a></li>
+                            <li class="list-inline-item"><a href="#"><i class="ecicon eci-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
                 <!-- Social End -->
             </div>
         </div>
