@@ -32,7 +32,7 @@
                         <div class="ec-header-bottons">
                             @if(auth()->check())
                             <!-- Header User Start -->
-                            <a href="{{route('auth.login')}}" class="ec-header-btn ec-header-user">
+                            <a href="{{route('auth.profile')}}" class="ec-header-btn ec-header-user">
                                 <div class="header-icon"><i class="fi-rr-user"></i></div>
                                 <div class="ec-btn-desc">
                                     <span class="ec-btn-title">Account</span>

@@ -194,9 +194,15 @@
             <div class="ec-nav-panel-icons">
                 <a href="{{route('home')}}" class="ec-header-btn"><i class="fi-rr-home"></i></a>
             </div>
-            <div class="ec-nav-panel-icons">
-                <a href="{{route('auth.login')}}" class="ec-header-btn"><i class="fi-rr-user"></i></a>
-            </div>
+            @if(auth()->check())
+                <div class="ec-nav-panel-icons">
+                    <a href="{{route('auth.profile')}}" class="ec-header-btn"><i class="fi-rr-user"></i></a>
+                </div>
+            @else
+                <div class="ec-nav-panel-icons">
+                    <a href="{{route('auth.login')}}" class="ec-header-btn"><i class="fi-rr-user"></i></a>
+                </div>
+            @endif
         </div>
     </div>
 </div>

@@ -86,7 +86,7 @@ class UserController extends Controller
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
 
-        return view('profile.index', compact('user', 'totalProductByCategory', 'products'));
+        return view('auth.profile', compact('user', 'totalProductByCategory', 'products'));
     }
 
     public function updateProfile(Request $request)
