@@ -242,7 +242,7 @@
                                     @csrf
                                     <span class="ec-contact-wrap">
                                         <label>Full Name*</label>
-                                        <input type="text" name="name" placeholder="Enter your first name"
+                                        <input type="text" name="name" placeholder="Enter your full name"
                                                required />
                                     </span>
                                     <span class="ec-contact-wrap">

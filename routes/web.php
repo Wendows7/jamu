@@ -69,10 +69,10 @@ Route::middleware('admin')->group(function () {
 
 });
 
-Route::get('/email', function () {
+//Route::get('/email', function () {
 //    Mail::to('aryadwi482@gmail.com')->send(new \App\Mail\NotifMail());
-    return new \App\Mail\NotifMail();
-});
+//    return new \App\Mail\NotifMail();
+//});
 
 
 
