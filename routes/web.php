@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\LoginController;
@@ -18,6 +19,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
 Route::post('/auth/login', [LoginController::class, 'authenticate'])->name('auth.authenticate');
 Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
 Route::post('/auth/register', [LoginController::class, 'store'])->name('auth.register.store');
+Route::get('/partnership', [PartnershipController::class, 'index'])->name('partnership');
 
 Route::middleware('auth')->group(function () {
     Route::post('/addToCart', [CartController::class, 'addToCart'])->name('cart.addToCart');
@@ -38,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/profile', [UserController::class, 'profile'])->name('auth.profile');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('auth.updateProfile');
+
+    Route::post('/partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
 
 });
 
@@ -63,6 +67,11 @@ Route::middleware('admin')->group(function () {
     Route::put('dashboard/admin/orders/update', [AdminController::class, 'updateStatusOrder'])->name('admin.orders.update');
 
 
+});
+
+Route::get('/email', function () {
+//    Mail::to('aryadwi482@gmail.com')->send(new \App\Mail\NotifMail());
+    return new \App\Mail\NotifMail();
 });
 
 

@@ -99,7 +99,7 @@
                 <ul>
                     <li><a href="{{route('home')}}">Home</a></li>
                     <li><a href="{{route('products')}}">Products</a></li>
-                    <li><a href="{{route('products')}}">Contact</a></li>
+                    <li><a href="{{route('partnership')}}">Contact</a></li>
                     <li><a href="{{route('products')}}">About</a></li>
                     @can('user')
                     <li><a href="{{route('user.orders')}}">Order History</a></li>
@@ -150,7 +150,7 @@
                                             <a href="{{route('products')}}" class="dropdown-arrow">Products</a>
                                         </li>
                                         <li class="non-drop">
-                                            <a href="javascript:void(0)" class="dropdown-arrow">Contact</a>
+                                            <a href="{{route('partnership')}}" class="dropdown-arrow">Partnership</a>
                                         </li>
                                         <li class="non-drop">
                                             <a href="javascript:void(0)" class="dropdown-arrow">About</a>
