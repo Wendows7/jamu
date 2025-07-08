@@ -77,6 +77,7 @@ return [
         public_path('storage') => storage_path('app/public'),
         public_path('product-images') => storage_path('app/public/product-images'),
         public_path('bukti_pembayaran') => storage_path('app/public/bukti_pembayaran'),
+        public_path('partnership_files') => storage_path('app/public/partnership_files'),
 
 
     ],
