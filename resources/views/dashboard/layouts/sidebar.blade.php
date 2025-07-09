@@ -15,5 +15,7 @@
         <li class={{ Request::is('dashboard/admin/category')? 'active' : '' }}><a class="nav-link" href="{{route('admin.category')}}"><i class="fa fa-database"></i> <span>Categories</span></a></li>
         <li class={{ Request::is('dashboard/admin/orders')? 'active' : '' }}><a class="nav-link" href="{{route('admin.orders')}}"><i class="fa fa-database"></i> <span>Orders</span></a></li>
       </ul>
+        <li class={{ Request::is('dashboard/admin/partnerships')? 'active' : '' }}><a class="nav-link" href="{{route('admin.partnerships')}}"><i class="far fa-file"></i><span>Partnership</span></a></li>
+      </ul>
     </aside>
   </div>

@@ -16,9 +16,13 @@ class ApprovalMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    protected $data;
+
+    public function __construct($data)
     {
-        //
+        // Initialization code can go here if needed
+        // For example, you could pass data to the view or set properties
+        $this->data = $data; // Example of passing data
     }
 
     /**
@@ -27,7 +31,7 @@ class ApprovalMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Approval Mail',
+            subject: 'Proposal Approval Notification',
         );
     }
 
@@ -38,6 +42,9 @@ class ApprovalMail extends Mailable
     {
         return new Content(
             markdown: 'emails.approval',
+            with: [
+                'data' => $this->data, // Pass the data to the view
+            ]
         );
     }
 

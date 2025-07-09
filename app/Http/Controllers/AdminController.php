@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\AdminService;
 use App\Services\CategoryProductService;
 use App\Services\OrderService;
+use App\Services\PartnershipService;
 use App\Services\ProductService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -18,14 +19,17 @@ class AdminController extends Controller
 
     protected $orderService;
 
+    protected $parnershipService;
+
     public function __construct(ProductService $productService, UserService $userService, AdminService $adminService,
-                                CategoryProductService $categoryService, OrderService $orderService)
+                                CategoryProductService $categoryService, OrderService $orderService, PartnershipService $partnershipService)
     {
         $this->productService = $productService;
         $this->userService = $userService;
         $this->adminService = $adminService;
         $this->categoryService = $categoryService;
         $this->orderService = $orderService;
+        $this->parnershipService = $partnershipService;
     }
 
     public function index()
@@ -198,5 +202,24 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Order status has been updated!');
 
+    }
+
+    public function getPartnerships()
+    {
+        $partnerships = $this->parnershipService->getAllData();
+        $title = 'Delete Partnership!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        $selisihMenit = $this->adminService->showMinute();
+
+        return view('dashboard.partnerships.index', compact('partnerships', 'selisihMenit'));
+
+    }
+
+    public function updatePartnershipStatus(Request $request)
+    {
+        $this->parnershipService->updateStatus($request);
+
+        return redirect()->back()->with('success', 'Partnership status has been updated!');
     }
 }

@@ -66,12 +66,19 @@ Route::middleware('admin')->group(function () {
     Route::get('dashboard/admin/orders', [AdminController::class, 'getOrders'])->name('admin.orders');
     Route::put('dashboard/admin/orders/update', [AdminController::class, 'updateStatusOrder'])->name('admin.orders.update');
 
+    Route::get('dashboard/admin/partnerships', [AdminController::class, 'getPartnerships'])->name('admin.partnerships');
+    Route::put('dashboard/admin/partnerships/update', [AdminController::class, 'updatePartnershipStatus'])->name('admin.partnerships.update');
+
 
 });
 
 //Route::get('/email', function () {
-//    Mail::to('aryadwi482@gmail.com')->send(new \App\Mail\NotifMail());
-//    return new \App\Mail\NotifMail();
+////    Mail::to('aryadwi482@gmail.com')->send(new \App\Mail\NotifMail());
+//    $data = [
+//        'name' => 'Arya Dwi',
+//        'status' => 'approved',
+//        ];
+//    return new \App\Mail\ApprovalMail($data);
 //});
 
 

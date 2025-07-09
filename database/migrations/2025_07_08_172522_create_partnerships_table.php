@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('file');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

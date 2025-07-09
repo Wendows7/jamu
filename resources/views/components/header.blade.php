@@ -99,7 +99,7 @@
                 <ul>
                     <li><a href="{{route('home')}}">Home</a></li>
                     <li><a href="{{route('products')}}">Products</a></li>
-                    <li><a href="{{route('partnership')}}">Contact</a></li>
+                    <li><a href="{{route('partnership')}}">Parnership</a></li>
                     <li><a href="{{route('products')}}">About</a></li>
                     @can('user')
                     <li><a href="{{route('user.orders')}}">Order History</a></li>
