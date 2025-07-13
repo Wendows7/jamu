@@ -10,16 +10,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\CategoryProductService;
 
 class LoginController extends Controller
 {
     protected $productService;
     protected $authService;
 
-    public function __construct(ProductService $productService, AuthService $authService)
+    protected  $categoryProductService;
+
+    public function __construct(ProductService $productService, AuthService $authService, CategoryProductService $categoryProductService)
     {
         $this->productService = $productService;
         $this->authService = $authService;
+        $this->categoryProductService = $categoryProductService;
     }
 
     public function index()
@@ -30,8 +34,9 @@ class LoginController extends Controller
         }
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
+        $categories = $this->categoryProductService->getAll()->take(5);
 
-        return view('auth.login', compact('totalProductByCategory', 'products'));
+        return view('auth.login', compact('totalProductByCategory', 'products', 'categories'));
     }
 
 
@@ -65,8 +70,9 @@ class LoginController extends Controller
     {
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
+        $categories = $this->categoryProductService->getAll()->take(5);
 
-        return view('auth.register', compact('totalProductByCategory', 'products'));
+        return view('auth.register', compact('totalProductByCategory', 'products', 'categories'));
     }
 
     public function store(Request $request) : RedirectResponse

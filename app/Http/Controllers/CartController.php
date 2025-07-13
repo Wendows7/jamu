@@ -8,6 +8,7 @@ use App\Services\ProductService;
 use App\Services\PaymentService;
 use App\Services\StockProductService;
 use App\Services\TransactionService;
+use App\Services\CategoryProductService;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -22,9 +23,12 @@ class CartController extends Controller
 
     protected $stockProductService;
 
+    protected $categoryProductService;
+
     public function __construct(ProductService $productService, CartService $cartService,
                                 transactionService $transactionService, OrderService $orderService,
-                                PaymentService $paymentService, StockProductService $stockProductService)
+                                PaymentService $paymentService, StockProductService $stockProductService,
+                                CategoryProductService $categoryProductService)
     {
         $this->productService = $productService;
         $this->cartService = $cartService;
@@ -32,12 +36,15 @@ class CartController extends Controller
         $this->orderService = $orderService;
         $this->paymentService = $paymentService;
         $this->stockProductService = $stockProductService;
+        $this->categoryProductService = $categoryProductService;
     }
 
     public function index()
     {
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
+        $categories = $this->categoryProductService->getAll()->take(5);
+
 
         if (session('cart')) {
             $cartData = session('cart');
@@ -48,10 +55,10 @@ class CartController extends Controller
                     $cartData[$key]['total'] = $item['price'] * $item['quantity'];
                 }
             }
-            return view('cart.index', compact('totalProductByCategory', 'products', 'cartData', 'totalCart'));
+            return view('cart.index', compact('totalProductByCategory', 'products', 'cartData', 'totalCart', 'categories'));
         } else {
             $totalCart = 0;
-            return view('cart.index', compact('totalProductByCategory', 'products', 'totalCart'));
+            return view('cart.index', compact('totalProductByCategory', 'products', 'totalCart', 'categories'));
         }
 
 
@@ -119,9 +126,11 @@ class CartController extends Controller
         $orderCode = session('orderCode');
         $totalPrice = session('totalPrice');
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
+        $categories = $this->categoryProductService->getAll()->take(5);
 
 
-        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice', 'totalProductByCategory'));
+
+        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice', 'totalProductByCategory', 'categories'));
     }
 
     public function buyNow(Request $request)
@@ -144,8 +153,9 @@ class CartController extends Controller
         }
         $transactionsData = $this->transactionService->getByOrderId($orderData->id);
         $paymentData = $this->paymentService->getPayment();
+        $categories = $this->categoryProductService->getAll()->take(5);
 
-        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData', 'totalProductByCategory'));
+        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData', 'totalProductByCategory', 'categories'));
     }
 
     public function addPaymentProof(Request $request)

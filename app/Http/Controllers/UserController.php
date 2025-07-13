@@ -9,6 +9,7 @@ use App\Services\TransactionService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\CategoryProductService;
 
 class UserController extends Controller
 {
@@ -19,16 +20,18 @@ class UserController extends Controller
     protected $orderService;
 
     protected $midtransService;
+    protected $categoryProductService;
 
     public function __construct(CartService $cartService, ProductService $productService,
                                 TransactionService $transactionService, UserService $userService,
-                                OrderService $orderService)
+                                OrderService $orderService, categoryProductService $categoryProductService)
     {
         $this->cartService = $cartService;
         $this->productService = $productService;
         $this->transactionService = $transactionService;
         $this->userService = $userService;
         $this->orderService = $orderService;
+        $this->categoryProductService = $categoryProductService;
 
     }
 
@@ -37,6 +40,8 @@ class UserController extends Controller
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
         $ordersData = $this->orderService->getOrderDataByUserId(auth()->user()->id);
+        $categories = $this->categoryProductService->getAll()->take(5);
+
 
         $page = request('page', 1);
         $perPage = 5;
@@ -53,7 +58,7 @@ class UserController extends Controller
         if ($ordersData->isEmpty()) {
             return redirect()->back()->with('error', 'No orders found for this user.');
         }
-        return view('orders.index', compact('totalProductByCategory', 'products', 'orders'));
+        return view('orders.index', compact('totalProductByCategory', 'products', 'orders', 'categories'));
     }
 
     public function createOrderDetail(Request $request)
@@ -85,8 +90,9 @@ class UserController extends Controller
         $user = auth()->user();
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $products = $this->productService->getAllProducts();
+        $categories = $this->categoryProductService->getAll()->take(5);
 
-        return view('auth.profile', compact('user', 'totalProductByCategory', 'products'));
+        return view('auth.profile', compact('user', 'totalProductByCategory', 'products', 'categories'));
     }
 
     public function updateProfile(Request $request)

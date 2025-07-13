@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Services\ProductService;
 use App\Services\StockProductService;
+use App\Services\CategoryProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -12,17 +13,22 @@ class ProductController extends Controller
     protected $product;
     protected $stockProductService;
 
-    public function __construct(ProductService $productService, StockProductService $stockProductService)
+    protected  $categoryProductService;
+
+    public function __construct(ProductService $productService, StockProductService $stockProductService, CategoryProductService $categoryProductService)
     {
         $this->product = $productService;
         $this->stockProductService = $stockProductService;
+        $this->categoryProductService = $categoryProductService;
     }
     public function index()
     {
         $products = $this->product->getAllProducts()->paginate(10);
         $totalProduct = $this->product->getTotalProduct();
         $totalProductByCategory = $this->product->getTotalProductByCategory();
-        return view('products.index', compact('products', 'totalProduct', 'totalProductByCategory'));
+        $categories = $this->categoryProductService->getAll()->take(5);
+
+        return view('products.index', compact('products', 'totalProduct', 'totalProductByCategory', 'categories'));
 
     }
 
@@ -31,7 +37,9 @@ class ProductController extends Controller
         $products = $this->product->shortBy($shortBy);
         $totalProduct = $this->product->getTotalProduct();
         $totalProductByCategory = $this->product->getTotalProductByCategory();
-        return view('products.main', compact('products', 'totalProductByCategory', 'totalProduct'));
+        $categories = $this->categoryProductService->getAll()->take(5);
+
+        return view('products.main', compact('products', 'totalProductByCategory', 'totalProduct', 'categories'));
     }
 
     public function detail($productId)
@@ -41,7 +49,9 @@ class ProductController extends Controller
 
         $products = Product::with('stockProduct')->get();
         $totalProductByCategory = $this->product->getTotalProductByCategory();
-        return view('products.detail', compact('product', 'products','totalProductByCategory', 'totalStock'));
+        $categories = $this->categoryProductService->getAll()->take(5);
+
+        return view('products.detail', compact('product', 'products','totalProductByCategory', 'totalStock', 'categories'));
     }
 
     public function store(Request $request)
@@ -57,9 +67,10 @@ class ProductController extends Controller
         $totalProduct = $this->product->getTotalProduct();
         $products = $this->product->searchProduct($slug);
         $totalProductByCategory = $this->product->getTotalProductByCategory();
+        $categories = $this->categoryProductService->getAll()->take(5);
         if ($products->isEmpty()) {
             return redirect()->back()->with('error', 'Product not found');
         }
-        return view('products.index', compact('products','totalProduct','totalProductByCategory'));
+        return view('products.index', compact('products','totalProduct','totalProductByCategory', 'categories'));
     }
 }

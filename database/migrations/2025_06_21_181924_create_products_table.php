@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('product_categories')
                 ->onDelete('cascade');
             $table->string("name");
-            $table->string("description");
+            $table->longText("description");
             $table->string("image")->nullable();
             $table->string('image_2')->nullable();
             $table->string('image_3')->nullable();
