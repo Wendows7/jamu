@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AboutController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContactController;
 
 
 
@@ -20,10 +21,10 @@ Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
 Route::post('/auth/login', [LoginController::class, 'authenticate'])->name('auth.authenticate');
 Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
 Route::post('/auth/register', [LoginController::class, 'store'])->name('auth.register.store');
-Route::get('/partnership', [PartnershipController::class, 'index'])->name('partnership');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('user')->group(function () {
     Route::post('/addToCart', [CartController::class, 'addToCart'])->name('cart.addToCart');
     Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
@@ -39,12 +40,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/order/cancel/{orderCode}', [UserController::class, 'cancelOrder'])->name('user.cancelOrderByOrderCode');
 
 
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/profile', [UserController::class, 'profile'])->name('auth.profile');
-    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('auth.updateProfile');
+//    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+//    Route::get('/profile', [UserController::class, 'profile'])->name('auth.profile');
+//    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('auth.updateProfile');
 
+//    Route::post('/partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
+
+});
+
+Route::middleware('partner')->group(function () {
+    Route::get('/partnership', [PartnershipController::class, 'index'])->name('partnership');
     Route::post('/partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
-
+    Route::get('/partnership/data', [PartnershipController::class, 'partnershipData'])->name('partnership.data');
 });
 
 Route::middleware('admin')->group(function () {
@@ -72,6 +79,12 @@ Route::middleware('admin')->group(function () {
     Route::put('dashboard/admin/partnerships/update', [AdminController::class, 'updatePartnershipStatus'])->name('admin.partnerships.update');
 
 
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/profile', [UserController::class, 'profile'])->name('auth.profile');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('auth.updateProfile');
 });
 
 //Route::get('/email', function () {

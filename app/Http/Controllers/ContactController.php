@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Partnership;
+use App\Services\CategoryProductService;
 use App\Services\PartnershipService;
 use App\Services\ProductService;
 use App\Services\TransactionService;
-use App\Services\CategoryProductService;
 use Illuminate\Http\Request;
 
-class PartnershipController extends Controller
+class ContactController extends Controller
 {
-
     protected $product;
     protected $transactionService;
 
@@ -33,25 +31,6 @@ class PartnershipController extends Controller
         $mostSoldProducts = $this->transactionService->getMostSoldProduct();
         $categories = $this->productCategoryService->getAll()->take(5);
 
-        return view('partnership.index', compact('totalProductByCategory', 'products', 'mostSoldProducts', 'categories'));
-    }
-
-    public  function create(Request $request)
-    {
-        $this->partnershipService->storePartnership($request);
-        return redirect()->back()->with('success', 'Partnership request submitted successfully.');
-    }
-
-    public function partnershipData()
-    {
-        $totalProductByCategory = $this->product->getTotalProductByCategory();
-        $products = $this->product->getAllProducts()->paginate(10);
-        $mostSoldProducts = $this->transactionService->getMostSoldProduct();
-        $categories = $this->productCategoryService->getAll()->take(5);
-
-        $data = $this->partnershipService->getDataByUserId(auth()->user()->id);
-
-        return view('partnership.partnership-data', compact('totalProductByCategory', 'products', 'mostSoldProducts', 'categories', 'data'));
-
+        return view('contacts.index', compact('totalProductByCategory', 'products', 'mostSoldProducts', 'categories'));
     }
 }

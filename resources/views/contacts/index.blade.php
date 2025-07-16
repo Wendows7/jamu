@@ -235,74 +235,67 @@
         <div class="container">
             <div class="row">
                 <div class="ec-common-wrapper">
-                    <div class="ec-contact-leftside">
-                        <div class="ec-contact-container">
-                            <div class="ec-contact-form">
-                                <center><h2>FORM PENGAJUAN PROPOSAL</h2></center>
-                                <br>
-                                <form action="{{route('partnership.create')}}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <span class="ec-contact-wrap">
-                                        <label>Company Name*</label>
-                                        <input type="text" name="company_name" placeholder="Enter your company name"
-                                               required />
-                                    </span>
-                                    <span class="ec-contact-wrap">
-                                        <label>Full Name*</label>
-                                        <input type="text" name="name" placeholder="Enter your full name"
-                                               required />
-                                    </span>
-                                    <span class="ec-contact-wrap">
-                                        <label>Email*</label>
-                                        <input type="email" name="email" placeholder="Enter your email address"
-                                               required />
-                                    </span>
-                                    <span class="ec-contact-wrap">
-                                        <label>Phone Number*</label>
-                                        <input type="text" name="phone" placeholder="Enter your phone number"
-                                               required />
-                                    </span>
-                                    <span class="ec-contact-wrap">
-                                        <label>Your Proposal* (PDF files only)</label>
-                                        <div class="ec-file-wrapper">
-                                            <div class="ec-file-btn">
-                                                <span>Choose PDF File</span>
-                                                <input type="file" name="file" required accept="application/pdf" onchange="validatePdfFile(this)"/>
-                                            </div>
-                                            <div class="ec-file-name" id="file-name">No file chosen</div>
-                                            <div class="file-error" id="file-error" style="color: #e74c3c; font-size: 12px; margin-top: 5px; display: none;">
-                                                Please select a PDF file only
-                                            </div>
-                                        </div>
-                                    </span>
-                                    <span class="ec-contact-wrap ec-contact-btn">
-                                        <button class="btn btn-primary" type="submit">Submit</button>
-                                    </span>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-{{--                    <div class="ec-contact-rightside">--}}
-{{--                        <div class="ec_contact_map">--}}
-{{--                            <div class="ec_map_canvas">--}}
-{{--                                <iframe id="ec_map_canvas"--}}
-{{--                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3981.4882567425966!2d98.6632663758934!3d3.7030605962709084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3036cd47d0fa573d%3A0xe3a96146b0ca56f9!2sJAMU%20DAPOER%20NISWAH!5e0!3m2!1sid!2sid!4v1751995190268!5m2!1sid!2sid"></iframe>--}}
-{{--                                <a href="https://sites.google.com/view/maps-api-v2/mapv2"></a>--}}
+{{--                    <div class="ec-contact-leftside">--}}
+{{--                        <div class="ec-contact-container">--}}
+{{--                            <div class="ec-contact-form">--}}
+{{--                                <form action="{{route('partnership.create')}}" method="post" enctype="multipart/form-data">--}}
+{{--                                    @csrf--}}
+{{--                                    <span class="ec-contact-wrap">--}}
+{{--                                        <label>Full Name*</label>--}}
+{{--                                        <input type="text" name="name" placeholder="Enter your full name"--}}
+{{--                                               required />--}}
+{{--                                    </span>--}}
+{{--                                    <span class="ec-contact-wrap">--}}
+{{--                                        <label>Email*</label>--}}
+{{--                                        <input type="email" name="email" placeholder="Enter your email address"--}}
+{{--                                               required />--}}
+{{--                                    </span>--}}
+{{--                                    <span class="ec-contact-wrap">--}}
+{{--                                        <label>Phone Number*</label>--}}
+{{--                                        <input type="text" name="phone" placeholder="Enter your phone number"--}}
+{{--                                               required />--}}
+{{--                                    </span>--}}
+{{--                                    <span class="ec-contact-wrap">--}}
+{{--                                        <label>Your Proposal* (PDF files only)</label>--}}
+{{--                                        <div class="ec-file-wrapper">--}}
+{{--                                            <div class="ec-file-btn">--}}
+{{--                                                <span>Choose PDF File</span>--}}
+{{--                                                <input type="file" name="file" required accept="application/pdf" onchange="validatePdfFile(this)"/>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="ec-file-name" id="file-name">No file chosen</div>--}}
+{{--                                            <div class="file-error" id="file-error" style="color: #e74c3c; font-size: 12px; margin-top: 5px; display: none;">--}}
+{{--                                                Please select a PDF file only--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </span>--}}
+{{--                                    <span class="ec-contact-wrap ec-contact-btn">--}}
+{{--                                        <button class="btn btn-primary" type="submit">Submit</button>--}}
+{{--                                    </span>--}}
+{{--                                </form>--}}
 {{--                            </div>--}}
 {{--                        </div>--}}
-{{--                        <div class="ec_contact_info">--}}
-{{--                            <h1 class="ec_contact_info_head">Contact us</h1>--}}
-{{--                            <ul class="align-items-center">--}}
-{{--                                <li class="ec-contact-item"><i class="ecicon eci-map-marker"--}}
-{{--                                                               aria-hidden="true"></i><span>Address:</span>Gg. Karya, Rengas Pulau, Kec. Medan Marelan, Kota Medan, Sumatera Utara 20252</li>--}}
-{{--                                <li class="ec-contact-item align-items-center"><i class="ecicon eci-phone"--}}
-{{--                                                                                  aria-hidden="true"></i><span>Call Us:</span><a href="tel:+6285370473384">+62 8537 0473 384</a></li>--}}
-{{--                                <li class="ec-contact-item align-items-center"><i class="ecicon eci-envelope"--}}
-{{--                                                                                  aria-hidden="true"></i><span>Email:</span><a--}}
-{{--                                        href="mailto:admin@jamudapoerniswah.shop">admin@jamudapoerniswah.shop</a></li>--}}
-{{--                            </ul>--}}
-{{--                        </div>--}}
 {{--                    </div>--}}
+                    <div class="ec-contact-rightside">
+                        <div class="ec_contact_map">
+                            <div class="ec_map_canvas">
+                                <iframe id="ec_map_canvas"
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3981.4882567425966!2d98.6632663758934!3d3.7030605962709084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3036cd47d0fa573d%3A0xe3a96146b0ca56f9!2sJAMU%20DAPOER%20NISWAH!5e0!3m2!1sid!2sid!4v1751995190268!5m2!1sid!2sid"></iframe>
+                                <a href="https://sites.google.com/view/maps-api-v2/mapv2"></a>
+                            </div>
+                        </div>
+                        <div class="ec_contact_info">
+                            <h1 class="ec_contact_info_head">Contact us</h1>
+                            <ul class="align-items-center">
+                                <li class="ec-contact-item"><i class="ecicon eci-map-marker"
+                                                               aria-hidden="true"></i><span>Address:</span>Gg. Karya, Rengas Pulau, Kec. Medan Marelan, Kota Medan, Sumatera Utara 20252</li>
+                                <li class="ec-contact-item align-items-center"><i class="ecicon eci-phone"
+                                                                                  aria-hidden="true"></i><span>Call Us:</span><a href="tel:+6285370473384">+62 8537 0473 384</a></li>
+                                <li class="ec-contact-item align-items-center"><i class="ecicon eci-envelope"
+                                                                                  aria-hidden="true"></i><span>Email:</span><a
+                                        href="mailto:admin@jamudapoerniswah.shop">admin@jamudapoerniswah.shop</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('partnerships', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
+            $table->string('company_name');
             $table->string('name');
             $table->string('email');
             $table->string('phone');
             $table->string('file');
+            $table->string('reply_file')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default('pending');
             $table->timestamps();

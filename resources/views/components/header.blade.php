@@ -51,6 +51,7 @@
                                 </a>
                                 <!-- Header User End -->
                             @endif
+                            @can('user')
                             <!-- Header Cart Start -->
                             <a href="#ec-side-cart" class="ec-header-btn ec-side-toggle">
                                 <div class="header-icon"><i class="fi-rr-shopping-basket"></i></div>
@@ -63,6 +64,17 @@
                                     @endif
                                 </div>
                             </a>
+                                @endcan
+                                @can('partner')
+                                    <!-- Header Cart Start -->
+                                    <a href="{{route('partnership.data')}}" class="ec-header-btn ec-header-user">
+                                        <div class="header-icon"><i class="fi-rr-document"></i></div>
+                                        <div class="ec-btn-desc">
+                                            <span class="ec-btn-title">Data</span>
+                                            <span class="ec-btn-stitle">Partnership</span>
+                                        </div>
+                                    </a>
+                                @endcan
                             <!-- Header Cart End -->
 
                             @can('user')
@@ -73,7 +85,9 @@
                                         <span class="ec-btn-stitle">History</span>
                                     </div>
                                 </a>
+                                @endcan
 {{--                            make button logout--}}
+                                @can('auth')
                             <form action="{{route('logout')}}" method="POST" class="ec-header-btn ec-header-logout">
                                 @csrf
                                 <button type="submit" class="header-icon"><i class="fi-rr-sign-out-alt"></i>
@@ -107,8 +121,7 @@
                 </ul>
             </div>
             <div class="header-res-lan-curr">
-
-                @can('user')
+                @can('auth')
                 <form action="{{route('logout')}}" method="POST" class="ec-header-btn ec-header-logout">
                     @csrf
                     <button type="submit" class="btn-danger rounded"><i class="fi-rr-sign-out-alt"></i>
@@ -149,8 +162,13 @@
                                         <li class="non-drop">
                                             <a href="{{route('products')}}" class="dropdown-arrow">Products</a>
                                         </li>
+                                        @can('partner')
                                         <li class="non-drop">
                                             <a href="{{route('partnership')}}" class="dropdown-arrow">Partnership</a>
+                                        </li>
+                                        @endcan
+                                        <li class="non-drop">
+                                            <a href="{{route('contact')}}" class="dropdown-arrow">Contacts</a>
                                         </li>
                                         <li class="non-drop">
                                             <a href="{{route('about')}}" class="dropdown-arrow">About</a>

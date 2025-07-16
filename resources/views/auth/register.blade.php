@@ -123,6 +123,23 @@
             .login-card { padding: 18px 3vw 13px 3vw;}
             .login-title { font-size: 1.17rem;}
         }
+        .user-type-select {
+            width: 100%;
+            padding: 13px 12px;
+            font-size: 1.05rem;
+            border: 1.5px solid #ececec;
+            border-radius: 8px;
+            background: #f7f8fa;
+            transition: border .15s;
+            outline: none;
+            appearance: auto;
+            color: #484848;
+        }
+
+        .user-type-select:focus {
+            border-color: #ff9000;
+            background: #fffaf1;
+        }
     </style>
 <body>
 <div class="login-wrapper">
@@ -141,6 +158,13 @@
             <div>
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password..." required>
+            </div>
+            <div class="user-type-section">
+                <label for="user_type">Account Type</label>
+                <select id="role" name="role" class="user-type-select">
+                    <option value="user" selected>Pembeli</option>
+                    <option value="partner">Partner</option>
+                </select>
             </div>
             <a href="#" class="forgot-link">Lupa Password?</a>
             <div class="login-actions">

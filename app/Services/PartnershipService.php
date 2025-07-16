@@ -25,6 +25,7 @@ class PartnershipService
 //        validate the data
         $validatedData = $data->validate([
             'name' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Adjust file validation as needed
@@ -38,6 +39,8 @@ class PartnershipService
                 'public'
             );
         }
+        $code = (string) \Str::uuid();
+        $validatedData['code'] = $code; // Generate a unique code for the partnership
         $validatedData['user_id'] = auth()->user()->id; // Store the authenticated user's ID
 
         // Store the partnership data
@@ -96,6 +99,11 @@ class PartnershipService
             'phone' => $partnership->phone]);
 
         return $partnership;
+    }
+
+    public function getDataByUserId($userId)
+    {
+        return $this->partnership->where('user_id', $userId)->latest()->paginate(10);
     }
 
 

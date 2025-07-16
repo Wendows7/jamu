@@ -83,10 +83,10 @@ class LoginController extends Controller
                 'name' => 'required|min:5|max:255',
                 'email' => 'required|email:dns|unique:users',
                 'password' => 'required|min:5',
+                'role' => 'required|in:user,partner',
             ]);
 
             $validateData['password'] = bcrypt($validateData['password']);
-            $validateData['role'] = 'user';
 
             User::create($validateData);
 

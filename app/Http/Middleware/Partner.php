@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Authenticate
+class Partner
 {
     /**
      * Handle an incoming request.
@@ -17,6 +17,10 @@ class Authenticate
     {
         if (!auth()->check()) {
             return redirect()->route('auth.login')->with("error", "You must be logged in to access this page.");
+        }
+
+        if (auth()->check() && auth()->user()->role !== 'partner') {
+            return redirect()->back()->with('error', 'You do not have permission to access this page.');
         }
         return $next($request);
     }

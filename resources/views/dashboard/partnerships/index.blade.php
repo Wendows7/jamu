@@ -37,10 +37,13 @@
                         <th class="text-center">
                           No
                         </th>
+                        <th>Code</th>
+                        <th>Company Name</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone Number</th>
                         <th>File</th>
+                        <th>Reply File</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -51,6 +54,8 @@
                         <td>
                           {{ $loop->iteration }}
                         </td>
+                        <td>{{ $data->code }}</td>
+                        <td>{{ $data->company_name }}</td>
                         <td>{{ $data->name }}</td>
                         <td>{{ $data->email }}</td>
                           <td>{{$data->phone}}</td>
@@ -61,6 +66,14 @@
                           @else
                             No File Uploaded
                           @endif
+                          </td>
+                          <td>
+                          @if ($data->reply_file)
+                            <a href="{{ asset($data->reply_file) }}" target="_blank" class="btn btn-icon icon-left btn-info"><i class="fas fa-file-pdf"></i> View File</a>
+                          @else
+                            No File Uploaded
+                          @endif
+                          </td>
                           <td>
                               @php
                                   $status = strtolower($data->status ?? 'other');

@@ -13,8 +13,11 @@ class Partnership extends Model
         'email',
         'phone',
         'file',
+        'company_name',
+        'code',
+        'reply_file'
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
