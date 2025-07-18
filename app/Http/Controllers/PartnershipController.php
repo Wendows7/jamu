@@ -54,4 +54,16 @@ class PartnershipController extends Controller
         return view('partnership.partnership-data', compact('totalProductByCategory', 'products', 'mostSoldProducts', 'categories', 'data'));
 
     }
+
+    public function uploadReplyFile(Request $request)
+    {
+        $data = $this->partnershipService->uploadReplyFile($request);
+
+        if ($data) {
+            return redirect()->back()->with('success', 'Partnership request submitted successfully.');
+        }
+
+        return redirect()->back()->withErrors(['file' => 'Failed to upload file. Please try again.']);
+
+    }
 }

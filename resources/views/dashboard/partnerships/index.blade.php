@@ -44,6 +44,7 @@
                         <th>Phone Number</th>
                         <th>File</th>
                         <th>Reply File</th>
+                        <th>Payment Proof</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -69,7 +70,14 @@
                           </td>
                           <td>
                           @if ($data->reply_file)
-                            <a href="{{ asset($data->reply_file) }}" target="_blank" class="btn btn-icon icon-left btn-info"><i class="fas fa-file-pdf"></i> View File</a>
+                            <a href="{{ asset($data->reply_file) }}" target="_blank" class="btn btn-icon icon-left btn-primary"><i class="fas fa-file-pdf"></i> View File</a>
+                          @else
+                            No File Uploaded
+                          @endif
+                          </td>
+                          <td>
+                          @if ($data->payment_proof)
+                            <a href="{{ asset($data->payment_proof) }}" target="_blank" class="btn btn-icon icon-left btn-success"><i class="fas fa-file-pdf"></i> View File</a>
                           @else
                             No File Uploaded
                           @endif

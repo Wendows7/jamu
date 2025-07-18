@@ -15,11 +15,17 @@ class Partnership extends Model
         'file',
         'company_name',
         'code',
-        'reply_file'
+        'reply_file',
+        'payment_proof',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function partnerSendHistory()
+    {
+        return $this->hasMany(PartnerSendHistory::class);
     }
 }

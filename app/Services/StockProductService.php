@@ -42,4 +42,15 @@ class StockProductService
     {
         return $this->stockProduct->where('product_id', $productId)->get();
     }
+
+    public function decreaseStock($productId, $size, $quantity)
+    {
+        $stock = $this->getStockSizeByProductId($productId, $size);
+        if ($stock >= $quantity) {
+            $newStock = $stock - $quantity;
+            $this->updateStockById($productId, $size, $newStock);
+            return true;
+        }
+        return false; // Not enough stock available
+    }
 }

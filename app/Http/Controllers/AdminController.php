@@ -9,6 +9,8 @@ use App\Services\PartnershipService;
 use App\Services\ProductService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Services\PartnerSendHistoryService;
+use App\Services\StockProductService;
 
 class AdminController extends Controller
 {
@@ -20,9 +22,12 @@ class AdminController extends Controller
     protected $orderService;
 
     protected $parnershipService;
+    protected $partnerSendHistoryService;
+    protected $stockProductService;
 
     public function __construct(ProductService $productService, UserService $userService, AdminService $adminService,
-                                CategoryProductService $categoryService, OrderService $orderService, PartnershipService $partnershipService)
+                                CategoryProductService $categoryService, OrderService $orderService, PartnershipService $partnershipService,
+                                PartnerSendHistoryService $partnerSendHistoryService, StockProductService $stockProductService)
     {
         $this->productService = $productService;
         $this->userService = $userService;
@@ -30,6 +35,8 @@ class AdminController extends Controller
         $this->categoryService = $categoryService;
         $this->orderService = $orderService;
         $this->parnershipService = $partnershipService;
+        $this->partnerSendHistoryService = $partnerSendHistoryService;
+        $this->stockProductService = $stockProductService;
     }
 
     public function index()
@@ -221,5 +228,26 @@ class AdminController extends Controller
         $this->parnershipService->updateStatus($request);
 
         return redirect()->back()->with('success', 'Partnership status has been updated!');
+    }
+
+    public function getPartnerSendHistory()
+    {
+        $data = $this->partnerSendHistoryService->getAll();
+        $product = $this->productService->getProducts();
+        $partner = $this->parnershipService->getAllData();
+        $title = 'Delete Partnership!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        $selisihMenit = $this->adminService->showMinute();
+
+        return view('dashboard.partnerships.send-history', compact('data', 'selisihMenit', 'product', 'partner'));
+    }
+
+    public function addPartnerSendHistory(Request $request)
+    {
+        $this->partnerSendHistoryService->create($request);
+        $this->stockProductService->decreaseStock($request->product_id, $request->size, $request->quantity);
+
+        return redirect()->back()->with('success', 'Data has been created!');
     }
 }

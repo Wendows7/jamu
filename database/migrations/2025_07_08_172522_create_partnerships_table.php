@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('reply_file')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default('pending');
+            $table->string('payment_proof')->nullable();
             $table->timestamps();
         });
     }

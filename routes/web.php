@@ -23,6 +23,7 @@ Route::get('/register', [LoginController::class, 'register'])->name('auth.regist
 Route::post('/auth/register', [LoginController::class, 'store'])->name('auth.register.store');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::get('/products/stocks/{productId}', [ProductController::class, 'getStocks'])->name('products.stocks');
 
 Route::middleware('user')->group(function () {
     Route::post('/addToCart', [CartController::class, 'addToCart'])->name('cart.addToCart');
@@ -52,6 +53,7 @@ Route::middleware('partner')->group(function () {
     Route::get('/partnership', [PartnershipController::class, 'index'])->name('partnership');
     Route::post('/partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
     Route::get('/partnership/data', [PartnershipController::class, 'partnershipData'])->name('partnership.data');
+    Route::post('/partnership/replyFile/Upload', [PartnershipController::class, 'uploadReplyFile'])->name('partnership.replyFile.upload');
 });
 
 Route::middleware('admin')->group(function () {
@@ -62,21 +64,24 @@ Route::middleware('admin')->group(function () {
     Route::post('dashboard/admin/users/create', [AdminController::class, 'addUser'])->name('admin.users.create');
     Route::put('dashboard/admin/users/update/{user}', [AdminController::class, 'editUserById'])->name('admin.users.update');
 
-    Route::get('dashboard/admin/products', [AdminController::class, 'getProducts'])->name('admin.products');
-    Route::delete('dashboard/admin/products/delete/{product}', [AdminController::class, 'deleteProductById'])->name('admin.products.delete');
-    Route::post('dashboard/admin/products/update', [AdminController::class, 'editProduct'])->name('admin.products.update');
-    Route::post('dashboard/admin/products/create', [AdminController::class, 'addProduct'])->name('admin.products.create');
+    Route::get('dashboard/admin/data/products', [AdminController::class, 'getProducts'])->name('admin.products');
+    Route::delete('dashboard/admin/data/products/delete/{product}', [AdminController::class, 'deleteProductById'])->name('admin.products.delete');
+    Route::post('dashboard/admin/data/products/update', [AdminController::class, 'editProduct'])->name('admin.products.update');
+    Route::post('dashboard/admin/data/products/create', [AdminController::class, 'addProduct'])->name('admin.products.create');
 
-    Route::get('dashboard/admin/category', [AdminController::class, 'getCategory'])->name('admin.category');
-    Route::post('dashboard/admin/category/create', [AdminController::class, 'addCategory'])->name('admin.category.create');
-    Route::post('dashboard/admin/category/update', [AdminController::class, 'editCategoryById'])->name('admin.category.update');
-    Route::delete('dashboard/admin/category/delete', [AdminController::class, 'deleteCategoryById'])->name('admin.category.delete');
+    Route::get('dashboard/admin/data/category', [AdminController::class, 'getCategory'])->name('admin.category');
+    Route::post('dashboard/admin/data/category/create', [AdminController::class, 'addCategory'])->name('admin.category.create');
+    Route::post('dashboard/admin/data/category/update', [AdminController::class, 'editCategoryById'])->name('admin.category.update');
+    Route::delete('dashboard/admin/data/category/delete', [AdminController::class, 'deleteCategoryById'])->name('admin.category.delete');
 
-    Route::get('dashboard/admin/orders', [AdminController::class, 'getOrders'])->name('admin.orders');
-    Route::put('dashboard/admin/orders/update', [AdminController::class, 'updateStatusOrder'])->name('admin.orders.update');
+    Route::get('dashboard/admin/data/orders', [AdminController::class, 'getOrders'])->name('admin.orders');
+    Route::put('dashboard/admin/data/orders/update', [AdminController::class, 'updateStatusOrder'])->name('admin.orders.update');
 
-    Route::get('dashboard/admin/partnerships', [AdminController::class, 'getPartnerships'])->name('admin.partnerships');
+    Route::get('dashboard/admin/partnerships/data', [AdminController::class, 'getPartnerships'])->name('admin.partnerships');
     Route::put('dashboard/admin/partnerships/update', [AdminController::class, 'updatePartnershipStatus'])->name('admin.partnerships.update');
+    Route::get('dashboard/admin/partnerships/data/sending', [AdminController::class, 'getPartnerSendHistory'])->name('admin.partnerships.sendHistory');
+    Route::post('dashboard/admin/partnerships/sending/add', [AdminController::class, 'addPartnerSendHistory'])->name('admin.partnerships.sending.add');
+
 
 
 });

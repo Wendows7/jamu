@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->hasMany(StockProduct::class);
     }
+
+    public function partnerSendHistory()
+    {
+        return $this->hasMany(PartnerSendHistory::class);
+    }
 }

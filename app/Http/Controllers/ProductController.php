@@ -73,4 +73,11 @@ class ProductController extends Controller
         }
         return view('products.index', compact('products','totalProduct','totalProductByCategory', 'categories'));
     }
+
+    public function getStocks($id)
+    {
+        // Fetch and return stocks for the given product
+        $stocks = $this->stockProductService->getStockByProductId($id);
+        return response()->json($stocks);
+    }
 }

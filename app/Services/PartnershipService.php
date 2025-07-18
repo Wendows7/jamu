@@ -106,6 +106,43 @@ class PartnershipService
         return $this->partnership->where('user_id', $userId)->latest()->paginate(10);
     }
 
+    public function uploadReplyFile($request)
+    {
+        $validatedData = $request->validate([
+            'reply_file' => 'required|file|mimes:pdf,doc,docx|max:2048', // Adjust file validation as needed
+            'payment_proof' => 'required|file|mimes:jpg,jpeg,png|max:2048', // Adjust file validation as needed
+        ]);
+
+        if ($request->file('reply_file')) {
+            $validatedData['reply_file'] = $request->file('reply_file')->storeAs(
+                'partnership_files',
+                time() . '_' . 'reply_file' . '_'. $request->file('reply_file')->getClientOriginalName(),
+                'public'
+            );
+        }
+
+        if ($request->file('payment_proof')) {
+            $validatedData['payment_proof'] = $request->file('payment_proof')->storeAs(
+                'partnership_files',
+                time() . '_' . 'payment_proof'. '_'.$request->file('payment_proof')->getClientOriginalName(),
+                'public'
+            );
+        }
+
+        $partnership = $this->partnership->find($request->id);
+
+        if (!$partnership) {
+            throw new \Exception('Partnership not found');
+        }
+        $partnership->reply_file = $validatedData['reply_file'];
+        $partnership->payment_proof = $validatedData['payment_proof'];
+        $partnership->save();
+
+        return $partnership;
+
+
+    }
+
 
 
 }

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('body')
-{{--    @include('orders.modal.order-view')--}}
+    @include('partnership.modal.upload')
     <style>
         .order-table-container {
             background: #fff;
