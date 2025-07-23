@@ -93,10 +93,13 @@
         // Store original template for each partnership
         const originalTemplates = {};
 
+        // Declare templateId once outside the loop
+        let templateId;
+
         // Initialize the first batch form for each partnership and store templates
         @foreach($partnerships as $data)
-        // Store a copy of the original template before initialization
-        const templateId = `batch-form-{{ $data->id }}-0`;
+        // Just assign to templateId without redeclaring it
+        templateId = `batch-form-{{ $data->id }}-0`;
         originalTemplates['{{ $data->id }}'] = document.getElementById(templateId).cloneNode(true);
         initializeBatchForm('{{ $data->id }}', 0);
         @endforeach
