@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('partner_send_histories', function (Blueprint $table) {
             $table->id();
+            $table->integer('batch_number');
             $table->foreignId('partnership_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('size');
             $table->string('quantity');
+            $table->string('status');
             $table->timestamps();
         });
     }

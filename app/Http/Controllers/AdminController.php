@@ -218,8 +218,10 @@ class AdminController extends Controller
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         $selisihMenit = $this->adminService->showMinute();
+        $product = $this->productService->getProducts();
+        $partner = $this->parnershipService->getAllData();
 
-        return view('dashboard.partnerships.index', compact('partnerships', 'selisihMenit'));
+        return view('dashboard.partnerships.index', compact('partnerships', 'selisihMenit', 'product', 'partner'));
 
     }
 
@@ -232,7 +234,8 @@ class AdminController extends Controller
 
     public function getPartnerSendHistory()
     {
-        $data = $this->partnerSendHistoryService->getAll();
+        $data = $this->partnerSendHistoryService->getAll(1);
+        $dataShow = $this->partnerSendHistoryService->getAll();
         $product = $this->productService->getProducts();
         $partner = $this->parnershipService->getAllData();
         $title = 'Delete Partnership!';
@@ -240,7 +243,7 @@ class AdminController extends Controller
         confirmDelete($title, $text);
         $selisihMenit = $this->adminService->showMinute();
 
-        return view('dashboard.partnerships.send-history', compact('data', 'selisihMenit', 'product', 'partner'));
+        return view('dashboard.partnerships.send-history', compact('data', 'selisihMenit', 'product', 'partner', 'dataShow'));
     }
 
     public function addPartnerSendHistory(Request $request)
@@ -249,5 +252,20 @@ class AdminController extends Controller
         $this->stockProductService->decreaseStock($request->product_id, $request->size, $request->quantity);
 
         return redirect()->back()->with('success', 'Data has been created!');
+    }
+
+    public function getPartnershipSendHistoryById($id)
+    {
+        // Fetch and return stocks for the given product
+        $data = $this->partnerSendHistoryService->getById($id);
+        return response()->json($data);
+    }
+
+    public function sendBatchPartnership(Request $request)
+    {
+        $this->partnerSendHistoryService->updateData($request);
+
+        return redirect()->back()->with('success', 'Data has been updated!');
+
     }
 }

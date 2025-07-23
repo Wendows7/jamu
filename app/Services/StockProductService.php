@@ -45,12 +45,15 @@ class StockProductService
 
     public function decreaseStock($productId, $size, $quantity)
     {
-        $stock = $this->getStockSizeByProductId($productId, $size);
-        if ($stock >= $quantity) {
-            $newStock = $stock - $quantity;
-            $this->updateStockById($productId, $size, $newStock);
-            return true;
+        foreach ($productId as $key => $value)
+        {
+            $stock = $this->getStockSizeByProductId($productId[$key], $size[$key]);
+            if ($stock >= $quantity[$key]) {
+                $newStock = $stock - $quantity[$key];
+                $this->updateStockById($productId[$key], $size[$key], $newStock);
+                return true;
+            }
+                return false; // Not enough stock available
         }
-        return false; // Not enough stock available
     }
 }

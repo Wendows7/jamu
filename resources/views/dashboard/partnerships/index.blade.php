@@ -3,6 +3,7 @@
 @section('body')
 
 @include('dashboard/partnerships/modal/edit')
+@include('dashboard.partnerships.modal.add-batch')
 {{--@include('dashboard/products/modal/create')--}}
 {{--@include('dashboard/products/modal/detail')--}}
 <!-- Main Content -->
@@ -97,7 +98,8 @@
                         </span>
                       </td>
                         <td>
-                            <button class="btn btn-icon editbtn icon-left btn-warning border-0"  data-toggle="modal" data-target="#updateStatusModal{{ $data->id }}"><i class="fas fa-exclamation-triangle"></i>Update Status</button>
+                            <button class="btn btn-icon editbtn icon-left btn-warning border-0 mb-1"  data-toggle="modal" data-target="#updateStatusModal{{ $data->id }}"><i class="fas fa-exclamation-triangle"></i>Update Status</button>
+                            <button class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addBatch{{ $data->id }}"><i class="fas fa-arrow-alt-circle-right"></i>Add Sending Batch</button>
                         </td>
                       </tr>
                       @endforeach

@@ -11,6 +11,8 @@ class PartnerSendHistory extends Model
         'partnership_id',
         'quantity',
         'size',
+        'batch_number',
+        'status'
     ];
 
     public function product()

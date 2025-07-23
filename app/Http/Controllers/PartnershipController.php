@@ -66,4 +66,5 @@ class PartnershipController extends Controller
         return redirect()->back()->withErrors(['file' => 'Failed to upload file. Please try again.']);
 
     }
+
 }

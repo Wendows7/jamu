@@ -9,28 +9,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="{{route('admin.partnerships.sending.add')}}" enctype="multipart/form-data" class="needs-validation" novalidate="" id="partnership-form">
+                <form method="post" action="{{route('admin.partnerships.sending.update')}}" enctype="multipart/form-data" class="needs-validation" novalidate="" id="partnership-form">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
                             <label>Company Name</label>
-                            <select name="partnership_id" class="form-control" required>
+                            <select name="partnership_id" id="product_select" class="form-control" required>
                                 <option value="">-- Select Company --</option>
                                 @foreach($partner as $value)
-                                    <option value="{{ $value->id }}" {{ old('partnership_id') == $value->id ? 'selected' : '' }}>
-                                        {{ $value->company_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="invalid-feedback">Please fill this form</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Product</label>
-                            <select name="product_id" id="product_select" class="form-control" required>
-                                <option value="">-- Select Product --</option>
-                                @foreach($product as $value)
                                     <option value="{{ $value->id }}" {{ old('product_id') == $value->id ? 'selected' : '' }}>
-                                        {{ $value->name }}
+                                        {{ $value->company_name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -39,22 +27,23 @@
 
                         <!-- Container for product stock info (initially hidden) -->
                         <div id="product_stock_container" class="form-group" style="display: none;">
-                            <label>Size & Available Stock</label>
-                            <select name="size" id="stock_select" class="form-control" required>
-                                <option value="">-- Select Stock Size --</option>
+                            <label>Batch Number</label>
+                            <select name="batch_number" id="stock_select" class="form-control" required>
+                                <option value="">-- Select batch number --</option>
                             </select>
-                            <div class="invalid-feedback">Please select available stock</div>
+                            <div class="invalid-feedback">Please select batch number</div>
                         </div>
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="number" name="quantity" id="quantity_input" class="form-control" min="1" required>
-                            <div class="invalid-feedback" id="quantity-error-message">Please fill this form</div>
-                            <small id="stock-availability-info" class="text-muted"></small>
-                        </div>
+                        <input type="hidden" name="status" value="sending">
+{{--                        <div class="form-group">--}}
+{{--                            <label>Quantity</label>--}}
+{{--                            <input type="number" name="quantity" id="quantity_input" class="form-control" min="1" required>--}}
+{{--                            <div class="invalid-feedback" id="quantity-error-message">Please fill this form</div>--}}
+{{--                            <small id="stock-availability-info" class="text-muted"></small>--}}
+{{--                        </div>--}}
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" id="submit-button" class="btn btn-primary">Add</button>
+                        <button type="submit" id="submit-button" class="btn btn-primary">Send</button>
                     </div>
                 </form>
             </div>
@@ -77,54 +66,65 @@
         const productSelect = document.getElementById('product_select');
         const stockContainer = document.getElementById('product_stock_container');
         const stockSelect = document.getElementById('stock_select');
-        const quantityInput = document.getElementById('quantity_input');
-        const stockInfo = document.getElementById('stock-availability-info');
         const submitButton = document.getElementById('submit-button');
         const form = document.getElementById('partnership-form');
 
-        let maxAvailableStock = 0;
+        // Create a container for batch details (add this after the stock_select in HTML)
+        let detailsContainer = document.getElementById('batch-details-container');
+        if (!detailsContainer) {
+            detailsContainer = document.createElement('div');
+            detailsContainer.id = 'batch-details-container';
+            detailsContainer.className = 'mt-3';
+            stockContainer.appendChild(detailsContainer);
+        }
 
         // Handle product selection and fetch stock information
         productSelect.addEventListener('change', function() {
             const productId = this.value;
 
-            // Reset quantity field when product changes
-            quantityInput.value = '';
-            quantityInput.classList.remove('is-valid', 'is-invalid');
-            stockInfo.textContent = '';
-            maxAvailableStock = 0;
+            // Hide details container when product changes
+            detailsContainer.style.display = 'none';
+            detailsContainer.innerHTML = '';
 
             if (productId) {
                 // Show loading indicator
                 stockContainer.style.display = 'block';
-                stockSelect.innerHTML = '<option>Loading stock data...</option>';
+                stockSelect.innerHTML = '<option>Loading batch data...</option>';
                 stockSelect.disabled = true;
 
-                // Fetch stock data for the selected product
-                fetch(`/products/stocks/${productId}`)
+                // Store batch data for reference
+                let batchDataMap = {};
+
+                // Fetch batch data for the selected product
+                fetch(`/partnership/sendHistory/${productId}`)
                     .then(response => response.json())
                     .then(data => {
                         // Clear and re-enable the stock dropdown
-                        stockSelect.innerHTML = '<option value="">-- Select Stock Size --</option>';
+                        stockSelect.innerHTML = '<option value="">-- Select batch number --</option>';
                         stockSelect.disabled = false;
 
-                        // Add stock options
+                        // Add batch options with simple display
                         if (data.length > 0) {
-                            data.forEach(stock => {
+                            data.forEach(batch => {
                                 const option = document.createElement('option');
-                                option.value = stock.size;
-                                option.textContent = `${stock.size} ML - ${stock.stock} items available`;
-                                option.dataset.price = stock.price;
-                                option.dataset.stock = stock.stock;
+                                option.value = batch.batch_number;
+                                option.textContent = `Batch #${batch.batch_number}`;
+
+                                // Store complete batch data for reference
+                                batchDataMap[batch.batch_number] = batch;
+
                                 stockSelect.appendChild(option);
                             });
+
+                            // Store batch data on the select element
+                            stockSelect.batchData = batchDataMap;
                         } else {
-                            stockSelect.innerHTML = '<option value="">No stock available</option>';
+                            stockSelect.innerHTML = '<option value="">No batches available</option>';
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching stock data:', error);
-                        stockSelect.innerHTML = '<option value="">Error loading stock data</option>';
+                        console.error('Error fetching batch data:', error);
+                        stockSelect.innerHTML = '<option value="">Error loading batch data</option>';
                     });
             } else {
                 // Hide stock selection if no product is selected
@@ -132,64 +132,54 @@
             }
         });
 
-        // Update available stock info when stock size changes
+        // Display batch details when a batch is selected
         stockSelect.addEventListener('change', function() {
-            if (this.selectedIndex > 0) {
-                const selectedOption = this.options[this.selectedIndex];
-                maxAvailableStock = parseInt(selectedOption.dataset.stock);
+            detailsContainer.innerHTML = '';
 
-                // Update quantity input attributes
-                quantityInput.max = maxAvailableStock;
-                quantityInput.placeholder = `Maximum: ${maxAvailableStock}`;
+            if (this.value && this.batchData && this.batchData[this.value]) {
+                const batchData = this.batchData[this.value];
 
-                // Show stock availability info
-                stockInfo.textContent = `Available stock: ${maxAvailableStock} items`;
-                stockInfo.className = 'text-muted mt-1';
+                // Create details card
+                detailsContainer.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Batch #${batchData.batch_number} Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" class="form-control" value="${batchData.product.name}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Size</label>
+                            <input type="text" class="form-control" value="${batchData.size} ML" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="text" class="form-control" value="${batchData.quantity}" readonly>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-                // Reset quantity value and validation
-                quantityInput.value = '';
-                quantityInput.classList.remove('is-valid', 'is-invalid');
+                detailsContainer.style.display = 'block';
+            } else {
+                detailsContainer.style.display = 'none';
             }
         });
-
-        // Validate quantity against available stock
-        quantityInput.addEventListener('input', validateQuantity);
-        quantityInput.addEventListener('change', validateQuantity);
-
-        function validateQuantity() {
-            const quantity = parseInt(quantityInput.value);
-            const errorMsg = document.getElementById('quantity-error-message');
-
-            // Clear previous validation
-            quantityInput.classList.remove('is-valid', 'is-invalid');
-
-            // Validate if we have a selected stock and quantity
-            if (maxAvailableStock > 0 && !isNaN(quantity)) {
-                if (quantity <= 0) {
-                    quantityInput.classList.add('is-invalid');
-                    errorMsg.textContent = 'Quantity must be greater than 0';
-                    return false;
-                } else if (quantity > maxAvailableStock) {
-                    quantityInput.classList.add('is-invalid');
-                    errorMsg.textContent = `Quantity cannot exceed available stock (${maxAvailableStock})`;
-                    return false;
-                } else {
-                    quantityInput.classList.add('is-valid');
-                    return true;
-                }
-            }
-            return false;
-        }
 
         // Form submission validation
         form.addEventListener('submit', function(event) {
-            if (!validateQuantity()) {
+            if (!stockSelect.value) {
+                stockSelect.classList.add('is-invalid');
                 event.preventDefault();
                 event.stopPropagation();
+            } else {
+                stockSelect.classList.add('is-valid');
             }
         });
 
-        // Check if product is pre-selected (e.g., from validation error)
+        // Check if product is pre-selected
         if (productSelect.value) {
             productSelect.dispatchEvent(new Event('change'));
         }

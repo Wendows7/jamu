@@ -24,6 +24,7 @@ Route::post('/auth/register', [LoginController::class, 'store'])->name('auth.reg
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/products/stocks/{productId}', [ProductController::class, 'getStocks'])->name('products.stocks');
+Route::get('/partnership/sendHistory/{partnerId}', [AdminController::class, 'getPartnershipSendHistoryById'])->name('partnership.sendHistory.data');
 
 Route::middleware('user')->group(function () {
     Route::post('/addToCart', [CartController::class, 'addToCart'])->name('cart.addToCart');
@@ -81,6 +82,7 @@ Route::middleware('admin')->group(function () {
     Route::put('dashboard/admin/partnerships/update', [AdminController::class, 'updatePartnershipStatus'])->name('admin.partnerships.update');
     Route::get('dashboard/admin/partnerships/data/sending', [AdminController::class, 'getPartnerSendHistory'])->name('admin.partnerships.sendHistory');
     Route::post('dashboard/admin/partnerships/sending/add', [AdminController::class, 'addPartnerSendHistory'])->name('admin.partnerships.sending.add');
+    Route::post('dashboard/admin/partnerships/sending/update', [AdminController::class, 'sendBatchPartnership'])->name('admin.partnerships.sending.update');
 
 
 

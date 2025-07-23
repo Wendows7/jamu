@@ -8,15 +8,15 @@
 <div class="main-content">
   <section class="section">
     <div class="section-header">
-        <h1>Partnership History</h1>
+        <h1>Send Product Partnership</h1>
         <div class="section-header-breadcrumb">
           <div class="breadcrumb-item active"><a href="/dashboard">Dashboard</a></div>
-          <div class="breadcrumb-item">Parnership Sending</div>
+          <div class="breadcrumb-item">Partnership Sending</div>
         </div>
       </div>
 
       <div class="section-body">
-        <h2 class="section-title">Partnership History</h2>
+        <h2 class="section-title">Send Product Partnership</h2>
         <p class="section-lead">
           Send product to partnership company
         </p>
@@ -26,7 +26,7 @@
            <button class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#createModal"><i class="far fa-user"></i>Send Product</button>
             <div class="card mt-3">
               <div class="card-header">
-                <h4>Table All History</h4>
+                <h4>Table Sending History</h4>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -36,6 +36,7 @@
                         <th class="text-center">
                           No
                         </th>
+                        <th>Batch Number</th>
                         <th>Company Name</th>
                         <th>Product</th>
                         <th>Quantity</th>
@@ -44,11 +45,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($data as $value)
+                      @foreach ($dataShow as $value)
                       <tr>
                         <td>
                           {{ $loop->iteration }}
                         </td>
+                        <td>#{{ $value['batch_number'] }}</td>
                         <td>{{ $value['company_name'] }}</td>
                         <td>{{ $value['product_name'] }}</td>
                         <td>{{ $value['quantity'] }}</td>
