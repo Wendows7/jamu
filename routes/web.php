@@ -55,6 +55,7 @@ Route::middleware('partner')->group(function () {
     Route::post('/partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
     Route::get('/partnership/data', [PartnershipController::class, 'partnershipData'])->name('partnership.data');
     Route::post('/partnership/replyFile/Upload', [PartnershipController::class, 'uploadReplyFile'])->name('partnership.replyFile.upload');
+    Route::get('/partnership/sendHistory', [PartnershipController::class, 'getSendingHistory'])->name('partnership.sendHistory');
 });
 
 Route::middleware('admin')->group(function () {

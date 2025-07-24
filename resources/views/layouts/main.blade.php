@@ -184,6 +184,16 @@
             <div class="ec-nav-panel-icons">
                 <a href="#ec-mobile-menu" class="navbar-toggler-btn ec-header-btn ec-side-toggle"><i class="fi fi-rr-menu-burger"></i></a>
             </div>
+            @can('partner')
+                <div class="ec-nav-panel-icons">
+                    <a href="{{route('partnership.data')}}" class="ec-header-btn"><i class="fi-rr-document"></i>
+{{--                        @if(session('cart'))--}}
+{{--                            <span class="ec-cart-noti ec-header-count cart-count-lable">{{count(session('cart'))}}</span>--}}
+{{--                        @endif--}}
+                    </a>
+                </div>
+            @endcan
+            @can('user')
             <div class="ec-nav-panel-icons">
                 <a href="#ec-side-cart" class="toggle-cart ec-header-btn ec-side-toggle"><i class="fi-rr-shopping-basket"></i>
                     @if(session('cart'))
@@ -191,6 +201,7 @@
                     @endif
             </a>
             </div>
+            @endcan
             <div class="ec-nav-panel-icons">
                 <a href="{{route('home')}}" class="ec-header-btn"><i class="fi-rr-home"></i></a>
             </div>

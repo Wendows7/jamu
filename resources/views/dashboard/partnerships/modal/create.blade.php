@@ -69,7 +69,7 @@
         const submitButton = document.getElementById('submit-button');
         const form = document.getElementById('partnership-form');
 
-        // Create a container for batch details (add this after the stock_select in HTML)
+        // Create a container for batch details
         let detailsContainer = document.getElementById('batch-details-container');
         if (!detailsContainer) {
             detailsContainer = document.createElement('div');
@@ -80,54 +80,54 @@
 
         // Handle product selection and fetch stock information
         productSelect.addEventListener('change', function() {
-            const productId = this.value;
+            const partnershipId = this.value;
 
             // Hide details container when product changes
             detailsContainer.style.display = 'none';
             detailsContainer.innerHTML = '';
 
-            if (productId) {
+            if (partnershipId) {
                 // Show loading indicator
                 stockContainer.style.display = 'block';
                 stockSelect.innerHTML = '<option>Loading batch data...</option>';
                 stockSelect.disabled = true;
 
-                // Store batch data for reference
-                let batchDataMap = {};
-
-                // Fetch batch data for the selected product
-                fetch(`/partnership/sendHistory/${productId}`)
+                // Fetch batch data for the selected partnership
+                fetch(`/partnership/sendHistory/${partnershipId}`)
                     .then(response => response.json())
                     .then(data => {
                         // Clear and re-enable the stock dropdown
                         stockSelect.innerHTML = '<option value="">-- Select batch number --</option>';
                         stockSelect.disabled = false;
 
-                        // Add batch options with simple display
-                        if (data.length > 0) {
-                            data.forEach(batch => {
-                                const option = document.createElement('option');
-                                option.value = batch.batch_number;
-                                option.textContent = `Batch #${batch.batch_number}`;
+                        // Group data by batch number
+                        const batchGroups = {};
 
-                                // Store complete batch data for reference
-                                batchDataMap[batch.batch_number] = batch;
+                        data.forEach(item => {
+                            const batchNum = item.batch_number;
+                            if (!batchGroups[batchNum]) {
+                                batchGroups[batchNum] = [];
+                            }
+                            batchGroups[batchNum].push(item);
+                        });
 
-                                stockSelect.appendChild(option);
-                            });
+                        // Add unique batch options
+                        Object.keys(batchGroups).forEach(batchNum => {
+                            const option = document.createElement('option');
+                            option.value = batchNum;
+                            option.textContent = `Batch #${batchNum}`;
+                            stockSelect.appendChild(option);
+                        });
 
-                            // Store batch data on the select element
-                            stockSelect.batchData = batchDataMap;
-                        } else {
-                            stockSelect.innerHTML = '<option value="">No batches available</option>';
-                        }
+                        // Store grouped batch data
+                        stockSelect.batchGroups = batchGroups;
                     })
                     .catch(error => {
                         console.error('Error fetching batch data:', error);
                         stockSelect.innerHTML = '<option value="">Error loading batch data</option>';
                     });
             } else {
-                // Hide stock selection if no product is selected
+                // Hide stock selection if no partnership is selected
                 stockContainer.style.display = 'none';
             }
         });
@@ -136,32 +136,49 @@
         stockSelect.addEventListener('change', function() {
             detailsContainer.innerHTML = '';
 
-            if (this.value && this.batchData && this.batchData[this.value]) {
-                const batchData = this.batchData[this.value];
+            if (this.value && this.batchGroups && this.batchGroups[this.value]) {
+                const batchProducts = this.batchGroups[this.value];
 
                 // Create details card
-                detailsContainer.innerHTML = `
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">Batch #${batchData.batch_number} Details</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>Product Name</label>
-                            <input type="text" class="form-control" value="${batchData.product.name}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Size</label>
-                            <input type="text" class="form-control" value="${batchData.size} ML" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input type="text" class="form-control" value="${batchData.quantity}" readonly>
-                        </div>
-                    </div>
-                </div>
-            `;
+                const card = document.createElement('div');
+                card.className = 'card';
 
+                // Create header
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                header.innerHTML = `<h6 class="mb-0">Batch #${this.value} Details</h6>`;
+                card.appendChild(header);
+
+                // Create card body
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                // Add each product in this batch
+                batchProducts.forEach((product, index) => {
+                    const productCard = document.createElement('div');
+                    productCard.className = index > 0 ? 'border-top pt-3 mt-3' : '';
+
+                    productCard.innerHTML = `
+                    <h6>Product #${index + 1}</h6>
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" class="form-control" value="${product.product.name}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Size</label>
+                        <input type="text" class="form-control" value="${product.size} ML" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="text" class="form-control" value="${product.quantity}" readonly>
+                    </div>
+                `;
+
+                    cardBody.appendChild(productCard);
+                });
+
+                card.appendChild(cardBody);
+                detailsContainer.appendChild(card);
                 detailsContainer.style.display = 'block';
             } else {
                 detailsContainer.style.display = 'none';

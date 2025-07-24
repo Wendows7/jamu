@@ -29,7 +29,7 @@ class StockProductService
 
     public function getStockSizeByProductId($productId,$size)
     {
-        return $this->stockProduct->where('product_id',$productId)->where('size', $size)->get()->first()->stock;
+        return $this->stockProduct->where('product_id',$productId)->where('size', $size)->get();
     }
 
     public function updateStockById($id, $size, $stock)
@@ -45,15 +45,15 @@ class StockProductService
 
     public function decreaseStock($productId, $size, $quantity)
     {
-        foreach ($productId as $key => $value)
-        {
-            $stock = $this->getStockSizeByProductId($productId[$key], $size[$key]);
-            if ($stock >= $quantity[$key]) {
-                $newStock = $stock - $quantity[$key];
-                $this->updateStockById($productId[$key], $size[$key], $newStock);
+            $stock = $this->getStockSizeByProductId($productId, $size)->first() !== null
+                ? $this->getStockSizeByProductId($productId, $size)->first()->stock
+                : $productId; ;
+
+            if ($stock >= $quantity) {
+                $newStock = $stock - $quantity;
+                $this->updateStockById($productId, $size, $newStock);
                 return true;
             }
                 return false; // Not enough stock available
-        }
     }
 }

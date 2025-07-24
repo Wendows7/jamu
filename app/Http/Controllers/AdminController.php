@@ -243,13 +243,14 @@ class AdminController extends Controller
         confirmDelete($title, $text);
         $selisihMenit = $this->adminService->showMinute();
 
+
         return view('dashboard.partnerships.send-history', compact('data', 'selisihMenit', 'product', 'partner', 'dataShow'));
     }
 
     public function addPartnerSendHistory(Request $request)
     {
         $this->partnerSendHistoryService->create($request);
-        $this->stockProductService->decreaseStock($request->product_id, $request->size, $request->quantity);
+//        $this->stockProductService->decreaseStock($request->product_id, $request->size, $request->quantity);
 
         return redirect()->back()->with('success', 'Data has been created!');
     }
@@ -264,6 +265,8 @@ class AdminController extends Controller
     public function sendBatchPartnership(Request $request)
     {
         $this->partnerSendHistoryService->updateData($request);
+        $this->stockProductService->decreaseStock($request->product_id, $request->size, $request->quantity);
+
 
         return redirect()->back()->with('success', 'Data has been updated!');
 

@@ -35,32 +35,53 @@
                                             <label>Company Name</label>
                                             <input type="text" class="form-control" value="{{ $data->company_name }}" readonly>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Product</label>
-                                            <select name="product_id[]" class="form-control product-select" required>
-                                                <option value="">-- Select Product --</option>
-                                                @foreach($product as $value)
-                                                    <option value="{{ $value->id }}">
-                                                        {{ $value->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Please select a product</div>
+
+                                        <!-- Container for products within this batch -->
+                                        <div class="product-entries-container" id="product-entries-container-{{ $data->id }}-0">
+                                            <!-- First product entry (template) -->
+                                            <div class="product-entry" id="product-entry-{{ $data->id }}-0-0">
+                                                <div class="card mb-3">
+                                                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                                                        <h6 class="mb-0">Product #1</h6>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-product-btn" style="display: none;">
+                                                            <i class="fas fa-times"></i> Remove
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <!-- Product selection, size, quantity fields -->
+                                                        <div class="form-group">
+                                                            <label>Product</label>
+                                                            <select name="products[0][product_id][]" class="form-control product-select" required>
+                                                                <option value="">-- Select Product --</option>
+                                                                @foreach($product as $value)
+                                                                    <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="invalid-feedback">Please select a product</div>
+                                                        </div>
+                                                        <div class="form-group stock-container" style="display: none;">
+                                                            <label>Size & Available Stock</label>
+                                                            <select name="products[0][size][]" class="form-control stock-select" required>
+                                                                <option value="">-- Select Stock Size --</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Please select available stock</div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Quantity</label>
+                                                            <input type="number" name="products[0][quantity][]" class="form-control quantity-input" min="1" required>
+                                                            <div class="invalid-feedback quantity-error-message">Please fill this form</div>
+                                                            <small class="text-muted stock-availability-info"></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <!-- Container for product stock info (initially hidden) -->
-                                        <div class="form-group stock-container" style="display: none;">
-                                            <label>Size & Available Stock</label>
-                                            <select name="size[]" class="form-control stock-select" required>
-                                                <option value="">-- Select Stock Size --</option>
-                                            </select>
-                                            <div class="invalid-feedback">Please select available stock</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Quantity</label>
-                                            <input type="number" name="quantity[]" class="form-control quantity-input" min="1" required>
-                                            <div class="invalid-feedback quantity-error-message">Please fill this form</div>
-                                            <small class="text-muted stock-availability-info"></small>
+                                        <!-- Button to add more products to this batch -->
+                                        <div class="text-center mb-3">
+                                            <button type="button" class="btn btn-outline-secondary add-product-btn" data-partnership-id="{{ $data->id }}" data-batch-index="0">
+                                                <i class="fas fa-plus"></i> Add Another Product
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -87,21 +108,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Object to track available stock for each batch form
-        const batchStockData = {};
+        // Object to track available stock for each product entry
+        const productStockData = {};
 
-        // Store original template for each partnership
-        const originalTemplates = {};
+        // Store original templates
+        const originalBatchTemplates = {};
+        const originalProductTemplates = {};
 
-        // Declare templateId once outside the loop
-        let templateId;
+        // Declare variables once outside loops
+        let batchTemplateId, productTemplateId;
 
         // Initialize the first batch form for each partnership and store templates
         @foreach($partnerships as $data)
-        // Just assign to templateId without redeclaring it
-        templateId = `batch-form-{{ $data->id }}-0`;
-        originalTemplates['{{ $data->id }}'] = document.getElementById(templateId).cloneNode(true);
+            batchTemplateId = `batch-form-{{ $data->id }}-0`;
+        productTemplateId = `product-entry-{{ $data->id }}-0-0`;
+
+        originalBatchTemplates['{{ $data->id }}'] = document.getElementById(batchTemplateId).cloneNode(true);
+        originalProductTemplates['{{ $data->id }}'] = document.getElementById(productTemplateId).cloneNode(true);
+
         initializeBatchForm('{{ $data->id }}', 0);
+        initializeProductEntry('{{ $data->id }}', 0, 0);
         @endforeach
 
         // Add click handlers for "Add Another Batch" buttons
@@ -126,107 +152,231 @@
                 }
 
                 const batchForms = container.querySelectorAll('.batch-form');
-                const newIndex = batchForms.length;
+                const newBatchIndex = batchForms.length;
 
-                // Use the stored original template instead of the current form
-                const newForm = originalTemplates[partnershipId].cloneNode(true);
-                newForm.id = `batch-form-${partnershipId}-${newIndex}`;
+                // Clone batch template and update IDs
+                const newBatchForm = originalBatchTemplates[partnershipId].cloneNode(true);
+                newBatchForm.id = `batch-form-${partnershipId}-${newBatchIndex}`;
 
-                // Update batch title and show remove button - with null checks
-                const batchTitle = newForm.querySelector('.batch-title');
-                if (batchTitle) {
-                    batchTitle.textContent = `Batch #${newIndex + 1}`;
+                // Update batch title and show remove button
+                const batchTitle = newBatchForm.querySelector('.batch-title');
+                if (batchTitle) batchTitle.textContent = `Batch #${newBatchIndex + 1}`;
+
+                const removeBatchBtn = newBatchForm.querySelector('.remove-batch-btn');
+                if (removeBatchBtn) removeBatchBtn.style.display = 'block';
+
+                // Update product container ID and add product button data attribute
+                const productContainer = newBatchForm.querySelector('.product-entries-container');
+                if (productContainer) productContainer.id = `product-entries-container-${partnershipId}-${newBatchIndex}`;
+
+                const addProductBtn = newBatchForm.querySelector('.add-product-btn');
+                if (addProductBtn) addProductBtn.dataset.batchIndex = newBatchIndex;
+
+                // Reset form elements
+                resetFormElements(newBatchForm, newBatchIndex);
+
+                // Add to container
+                container.appendChild(newBatchForm);
+
+                // Initialize the new batch
+                initializeBatchForm(partnershipId, newBatchIndex);
+
+                // Important fix: We need to reinitialize the product entry in the new batch
+                const productEntry = newBatchForm.querySelector('.product-entry');
+                if (productEntry) {
+                    productEntry.id = `product-entry-${partnershipId}-${newBatchIndex}-0`;
+                    initializeProductEntry(partnershipId, newBatchIndex, 0);
                 }
-
-                const removeBtn = newForm.querySelector('.remove-batch-btn');
-                if (removeBtn) {
-                    removeBtn.style.display = 'block';
-                }
-
-                // Clear form inputs but keep readonly values
-                newForm.querySelectorAll('input:not([readonly])').forEach(input => {
-                    input.value = '';
-                });
-
-                // Reset selects
-                newForm.querySelectorAll('select').forEach(select => {
-                    select.selectedIndex = 0;
-                    if (!select.classList.contains('product-select')) {
-                        select.innerHTML = '<option value="">-- Select Stock Size --</option>';
-                    }
-                });
-
-                // Reset validation classes and messages
-                newForm.querySelectorAll('.is-valid, .is-invalid').forEach(element => {
-                    element.classList.remove('is-valid', 'is-invalid');
-                });
-
-                // Hide stock container and clear info
-                const stockContainer = newForm.querySelector('.stock-container');
-                if (stockContainer) {
-                    stockContainer.style.display = 'none';
-                }
-
-                const stockInfo = newForm.querySelector('.stock-availability-info');
-                if (stockInfo) {
-                    stockInfo.textContent = '';
-                }
-
-                // Add the new form to the container
-                container.appendChild(newForm);
-
-                // Initialize the new batch form
-                initializeBatchForm(partnershipId, newIndex);
             });
         });
 
-        function initializeBatchForm(partnershipId, index) {
-            const batchForm = document.getElementById(`batch-form-${partnershipId}-${index}`);
-            if (!batchForm) {
-                console.error(`Form not found: batch-form-${partnershipId}-${index}`);
+        // Add click handlers for "Add Another Product" buttons - using event delegation
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.add-product-btn')) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const btn = e.target.closest('.add-product-btn');
+            const partnershipId = btn.dataset.partnershipId;
+            const batchIndex = parseInt(btn.dataset.batchIndex);
+
+            console.log(`Add product clicked for batch ${batchIndex}`);
+
+            const container = document.getElementById(`product-entries-container-${partnershipId}-${batchIndex}`);
+            if (!container) {
+                console.error(`Product container not found: product-entries-container-${partnershipId}-${batchIndex}`);
                 return;
             }
 
-            const batchId = `${partnershipId}-${index}`;
+            const productEntries = container.querySelectorAll('.product-entry');
+            const newProductIndex = productEntries.length;
 
-            // Initialize stock data tracking
-            batchStockData[batchId] = { maxAvailableStock: 0 };
+            // Clone product template
+            const newProductEntry = originalProductTemplates[partnershipId].cloneNode(true);
+            newProductEntry.id = `product-entry-${partnershipId}-${batchIndex}-${newProductIndex}`;
 
-            // Get form elements with null checks
-            const productSelect = batchForm.querySelector('.product-select');
-            const stockContainer = batchForm.querySelector('.stock-container');
-            const stockSelect = batchForm.querySelector('.stock-select');
-            const quantityInput = batchForm.querySelector('.quantity-input');
-            const stockInfo = batchForm.querySelector('.stock-availability-info');
+            // Update product title and show remove button
+            const productTitle = newProductEntry.querySelector('h6');
+            if (productTitle) productTitle.textContent = `Product #${newProductIndex + 1}`;
+
+            const removeProductBtn = newProductEntry.querySelector('.remove-product-btn');
+            if (removeProductBtn) removeProductBtn.style.display = 'block';
+
+            // Update name attributes for this product
+            updateProductNameAttributes(newProductEntry, batchIndex);
+
+            // Reset form controls
+            resetProductFormElements(newProductEntry);
+
+            // Add to container and initialize
+            container.appendChild(newProductEntry);
+            initializeProductEntry(partnershipId, batchIndex, newProductIndex);
+        });
+
+        // Helper functions for form handling
+        function resetFormElements(batchForm, batchIndex) {
+            // Clear inputs
+            batchForm.querySelectorAll('input:not([readonly])').forEach(input => {
+                input.value = '';
+            });
+
+            // Reset selects
+            batchForm.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+                if (!select.classList.contains('product-select')) {
+                    select.innerHTML = '<option value="">-- Select Stock Size --</option>';
+                }
+            });
+
+            // Reset validation classes
+            batchForm.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+            });
+
+            // Update name attributes for all products in this batch
+            batchForm.querySelectorAll('.product-entry').forEach(entry => {
+                updateProductNameAttributes(entry, batchIndex);
+            });
+
+            // Hide stock containers
+            batchForm.querySelectorAll('.stock-container').forEach(container => {
+                container.style.display = 'none';
+            });
+
+            // Clear stock info
+            batchForm.querySelectorAll('.stock-availability-info').forEach(info => {
+                info.textContent = '';
+            });
+        }
+
+        function resetProductFormElements(productEntry) {
+            productEntry.querySelectorAll('input:not([readonly])').forEach(input => {
+                input.value = '';
+            });
+
+            productEntry.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+                if (!select.classList.contains('product-select')) {
+                    select.innerHTML = '<option value="">-- Select Stock Size --</option>';
+                }
+            });
+
+            productEntry.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+            });
+
+            const stockContainer = productEntry.querySelector('.stock-container');
+            if (stockContainer) stockContainer.style.display = 'none';
+
+            const stockInfo = productEntry.querySelector('.stock-availability-info');
+            if (stockInfo) stockInfo.textContent = '';
+        }
+
+        function updateProductNameAttributes(productEntry, batchIndex) {
+            const productSelect = productEntry.querySelector('.product-select');
+            if (productSelect) productSelect.name = `products[${batchIndex}][product_id][]`;
+
+            const sizeSelect = productEntry.querySelector('.stock-select');
+            if (sizeSelect) sizeSelect.name = `products[${batchIndex}][size][]`;
+
+            const quantityInput = productEntry.querySelector('.quantity-input');
+            if (quantityInput) quantityInput.name = `products[${batchIndex}][quantity][]`;
+        }
+
+        function initializeBatchForm(partnershipId, batchIndex) {
+            const batchForm = document.getElementById(`batch-form-${partnershipId}-${batchIndex}`);
+            if (!batchForm) {
+                console.error(`Form not found: batch-form-${partnershipId}-${batchIndex}`);
+                return;
+            }
+
             const removeBtn = batchForm.querySelector('.remove-batch-btn');
-
-            // Set up remove button handler
             if (removeBtn) {
                 removeBtn.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
                     batchForm.remove();
-                    delete batchStockData[batchId];
 
-                    // Update batch numbers
-                    const container = document.getElementById(`batch-forms-container-${partnershipId}`);
-                    const remainingForms = container.querySelectorAll('.batch-form');
-                    remainingForms.forEach((form, i) => {
-                        const titleElem = form.querySelector('.batch-title');
-                        if (titleElem) titleElem.textContent = `Batch #${i + 1}`;
-
-                        const btnElem = form.querySelector('.remove-batch-btn');
-                        if (btnElem) btnElem.style.display = i > 0 ? 'block' : 'none';
-                    });
+                    // Update batch numbers and name attributes
+                    updateBatchNumbers(partnershipId);
                 };
             }
+        }
 
-            // Set up product select change handler
+        function initializeProductEntry(partnershipId, batchIndex, productIndex) {
+            const productEntry = document.getElementById(`product-entry-${partnershipId}-${batchIndex}-${productIndex}`);
+            if (!productEntry) {
+                console.error(`Product entry not found: product-entry-${partnershipId}-${batchIndex}-${productIndex}`);
+                return;
+            }
+
+            const productEntryId = `${partnershipId}-${batchIndex}-${productIndex}`;
+            productStockData[productEntryId] = { maxAvailableStock: 0 };
+
+            setupRemoveProductButton(productEntry, partnershipId, batchIndex);
+            setupProductSelection(productEntry, productEntryId);
+        }
+
+        function setupRemoveProductButton(productEntry, partnershipId, batchIndex) {
+            const removeBtn = productEntry.querySelector('.remove-product-btn');
+            if (removeBtn) {
+                removeBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    productEntry.remove();
+
+                    // Update product numbers in this batch
+                    updateProductNumbers(partnershipId, batchIndex);
+                };
+            }
+        }
+
+        function setupProductSelection(productEntry, productEntryId) {
+            // Use let for elements that will be updated
+            let productSelect = productEntry.querySelector('.product-select');
+            let stockContainer = productEntry.querySelector('.stock-container');
+            let stockSelect = productEntry.querySelector('.stock-select');
+            let quantityInput = productEntry.querySelector('.quantity-input');
+            let stockInfo = productEntry.querySelector('.stock-availability-info');
+
             if (productSelect) {
-                productSelect.onchange = function() {
+                // Replace with fresh clone to remove any existing event listeners
+                const newProductSelect = productSelect.cloneNode(true);
+                productSelect.parentNode.replaceChild(newProductSelect, productSelect);
+                productSelect = newProductSelect; // Update reference to point to new element
+
+                productSelect.addEventListener('change', function() {
                     const productId = this.value;
-                    console.log(`Product selected: ${productId} for batch ${batchId}`);
+                    console.log(`Product selected: ${productId} for entry ${productEntryId}`);
+
+                    // Re-fetch elements to make sure we have current references
+                    stockContainer = productEntry.querySelector('.stock-container');
+                    stockSelect = productEntry.querySelector('.stock-select');
+                    quantityInput = productEntry.querySelector('.quantity-input');
+                    stockInfo = productEntry.querySelector('.stock-availability-info');
 
                     // Reset quantity and validation
                     if (quantityInput) {
@@ -235,57 +385,77 @@
                     }
 
                     if (stockInfo) stockInfo.textContent = '';
-                    batchStockData[batchId].maxAvailableStock = 0;
+                    productStockData[productEntryId].maxAvailableStock = 0;
 
-                    if (productId && stockContainer && stockSelect) {
-                        // Show loading indicator
-                        stockContainer.style.display = 'block';
-                        stockSelect.innerHTML = '<option>Loading stock data...</option>';
-                        stockSelect.disabled = true;
+                    if (productId) {
+                        // Always ensure stock container is visible when product is selected
+                        if (stockContainer) stockContainer.style.display = 'block';
 
-                        // Fetch stock data
-                        fetch(`/products/stocks/${productId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(`Stock data received for batch ${batchId}:`, data);
+                        if (stockSelect) {
+                            // Show loading indicator
+                            stockSelect.innerHTML = '<option>Loading stock data...</option>';
+                            stockSelect.disabled = true;
 
-                                // Clear and re-enable dropdown
-                                stockSelect.innerHTML = '<option value="">-- Select Stock Size --</option>';
-                                stockSelect.disabled = false;
+                            // Fetch stock data
+                            fetch(`/products/stocks/${productId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(`Stock data received for entry ${productEntryId}:`, data);
 
-                                // Add stock options
-                                if (data && data.length > 0) {
-                                    data.forEach(stock => {
-                                        const option = document.createElement('option');
-                                        option.value = stock.size;
-                                        option.textContent = `${stock.size} ML - ${stock.stock} items available`;
-                                        option.dataset.stock = stock.stock;
-                                        stockSelect.appendChild(option);
-                                    });
-                                    console.log(`Added ${data.length} stock options to select`);
-                                } else {
-                                    stockSelect.innerHTML = '<option value="">No stock available</option>';
-                                }
-                            })
-                            .catch(error => {
-                                console.error(`Error fetching stock:`, error);
-                                stockSelect.innerHTML = '<option value="">Error loading stock data</option>';
-                                stockSelect.disabled = false;
-                            });
+                                    // Re-fetch the select element to ensure we have the latest reference
+                                    stockSelect = productEntry.querySelector('.stock-select');
+                                    if (!stockSelect) return;
+
+                                    // Clear and re-enable dropdown
+                                    stockSelect.innerHTML = '<option value="">-- Select Stock Size --</option>';
+                                    stockSelect.disabled = false;
+
+                                    // Add stock options
+                                    if (data && data.length > 0) {
+                                        data.forEach(stock => {
+                                            console.log(stock);
+                                            const option = document.createElement('option');
+                                            option.value = stock.size;
+                                            option.textContent = `${stock.size} ML - ${stock.stock} items available`;
+                                            option.dataset.stock = stock.stock;
+                                            stockSelect.appendChild(option);
+                                        });
+                                        console.log(`Added ${data.length} stock options to select`);
+                                    } else {
+                                        stockSelect.innerHTML = '<option value="">No stock available</option>';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error(`Error fetching stock:`, error);
+                                    stockSelect = productEntry.querySelector('.stock-select');
+                                    if (stockSelect) {
+                                        stockSelect.innerHTML = '<option value="">Error loading stock data</option>';
+                                        stockSelect.disabled = false;
+                                    }
+                                });
+                        }
                     } else if (stockContainer) {
                         stockContainer.style.display = 'none';
                     }
-                };
+                });
             }
 
-            // Rest of the function remains the same
             if (stockSelect) {
-                stockSelect.onchange = function() {
+                // Replace with fresh clone to remove any existing event listeners
+                const newStockSelect = stockSelect.cloneNode(true);
+                stockSelect.parentNode.replaceChild(newStockSelect, stockSelect);
+                stockSelect = newStockSelect; // Update reference
+
+                stockSelect.addEventListener('change', function() {
+                    // Re-fetch quantity input and stock info
+                    quantityInput = productEntry.querySelector('.quantity-input');
+                    stockInfo = productEntry.querySelector('.stock-availability-info');
+
                     if (this.selectedIndex > 0 && quantityInput && stockInfo) {
                         const selectedOption = this.options[this.selectedIndex];
                         const stockAmount = parseInt(selectedOption.dataset.stock);
 
-                        batchStockData[batchId].maxAvailableStock = stockAmount;
+                        productStockData[productEntryId].maxAvailableStock = stockAmount;
                         quantityInput.max = stockAmount;
                         quantityInput.placeholder = `Maximum: ${stockAmount}`;
                         quantityInput.value = '';
@@ -294,20 +464,104 @@
                         stockInfo.textContent = `Available stock: ${stockAmount} items`;
                         stockInfo.className = 'text-muted mt-1';
                     }
-                };
+                });
             }
 
             if (quantityInput) {
-                quantityInput.oninput = function() {
-                    validateQuantity(this, batchId);
-                };
-                quantityInput.onchange = function() {
-                    validateQuantity(this, batchId);
-                };
+                // Replace with fresh clone to remove any existing event listeners
+                const newQuantityInput = quantityInput.cloneNode(true);
+                quantityInput.parentNode.replaceChild(newQuantityInput, quantityInput);
+                quantityInput = newQuantityInput; // Update reference
+
+                quantityInput.addEventListener('input', function() {
+                    validateQuantity(this, productEntryId);
+                });
             }
         }
 
-        // Rest of the code remains the same
+        function updateBatchNumbers(partnershipId) {
+            const container = document.getElementById(`batch-forms-container-${partnershipId}`);
+            const remainingForms = container.querySelectorAll('.batch-form');
+
+            remainingForms.forEach((form, i) => {
+                // Update batch title
+                const titleElem = form.querySelector('.batch-title');
+                if (titleElem) titleElem.textContent = `Batch #${i + 1}`;
+
+                // Update batch ID
+                form.id = `batch-form-${partnershipId}-${i}`;
+
+                // Update add product button data attribute
+                const addProductBtn = form.querySelector('.add-product-btn');
+                if (addProductBtn) addProductBtn.dataset.batchIndex = i;
+
+                // Update product entries container ID
+                const productContainer = form.querySelector('.product-entries-container');
+                if (productContainer) productContainer.id = `product-entries-container-${partnershipId}-${i}`;
+
+                // Update name attributes for all products in this batch
+                form.querySelectorAll('.product-entry').forEach((entry, j) => {
+                    entry.id = `product-entry-${partnershipId}-${i}-${j}`;
+                    updateProductNameAttributes(entry, i);
+
+                    // Reinitialize all product entries when batch index changes
+                    initializeProductEntry(partnershipId, i, j);
+                });
+
+                // Show/hide remove button based on position
+                const btnElem = form.querySelector('.remove-batch-btn');
+                if (btnElem) btnElem.style.display = i > 0 ? 'block' : 'none';
+            });
+        }
+
+        function updateProductNumbers(partnershipId, batchIndex) {
+            const container = document.getElementById(`product-entries-container-${partnershipId}-${batchIndex}`);
+            if (!container) return;
+
+            const remainingProducts = container.querySelectorAll('.product-entry');
+            remainingProducts.forEach((entry, i) => {
+                // Update product title
+                const titleElem = entry.querySelector('h6');
+                if (titleElem) titleElem.textContent = `Product #${i + 1}`;
+
+                // Update ID
+                entry.id = `product-entry-${partnershipId}-${batchIndex}-${i}`;
+
+                // Show/hide remove button based on position
+                const btnElem = entry.querySelector('.remove-product-btn');
+                if (btnElem) btnElem.style.display = i > 0 ? 'block' : 'none';
+            });
+        }
+
+        function validateQuantity(input, productEntryId) {
+            const maxStock = productStockData[productEntryId]?.maxAvailableStock || 0;
+            const value = parseInt(input.value);
+
+            if (!isNaN(value) && value > 0) {
+                if (maxStock > 0 && value > maxStock) {
+                    input.classList.add('is-invalid');
+                    input.classList.remove('is-valid');
+
+                    // Update error message
+                    const errorMsg = input.nextElementSibling;
+                    if (errorMsg && errorMsg.classList.contains('invalid-feedback')) {
+                        errorMsg.textContent = `Maximum available stock is ${maxStock}`;
+                    }
+                } else {
+                    input.classList.add('is-valid');
+                    input.classList.remove('is-invalid');
+                }
+            } else {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+
+                // Reset to default error
+                const errorMsg = input.nextElementSibling;
+                if (errorMsg && errorMsg.classList.contains('invalid-feedback')) {
+                    errorMsg.textContent = 'Please enter a valid quantity';
+                }
+            }
+        }
     });
 </script>
 
@@ -345,19 +599,27 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    .add-batch-btn {
+    .add-batch-btn, .add-product-btn {
         transition: all 0.2s ease;
     }
 
-    .add-batch-btn:hover {
+    .add-batch-btn:hover, .add-product-btn:hover {
         transform: translateY(-2px);
     }
 
-    .remove-batch-btn {
+    .remove-batch-btn, .remove-product-btn {
         transition: all 0.2s ease;
     }
 
-    .remove-batch-btn:hover {
+    .remove-batch-btn:hover, .remove-product-btn:hover {
         background-color: #f8d7da;
+    }
+
+    .product-entry .card {
+        border-color: #f0f0f0;
+    }
+
+    .product-entry .card-header {
+        background-color: #f8f9fa;
     }
 </style>

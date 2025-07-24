@@ -74,6 +74,13 @@
                                             <span class="ec-btn-stitle">Partnership</span>
                                         </div>
                                     </a>
+                                    <a href="{{route('partnership.sendHistory')}}" class="ec-header-btn ec-header-user">
+                                        <div class="header-icon"><i class="fi-rr-book-open-reader"></i></div>
+                                        <div class="ec-btn-desc">
+                                            <span class="ec-btn-title">Order</span>
+                                            <span class="ec-btn-stitle">History</span>
+                                        </div>
+                                    </a>
                                 @endcan
                             <!-- Header Cart End -->
 
@@ -113,7 +120,10 @@
                 <ul>
                     <li><a href="{{route('home')}}">Home</a></li>
                     <li><a href="{{route('products')}}">Products</a></li>
-                    <li><a href="{{route('partnership')}}">Parnership</a></li>
+                    @can('partner')
+                    <li><a href="{{route('partnership')}}">Partnership</a></li>
+                    @endcan
+                    <li><a href="{{route('contact')}}">Contact</a></li>
                     <li><a href="{{route('about')}}">About</a></li>
                     @can('user')
                     <li><a href="{{route('user.orders')}}">Order History</a></li>
