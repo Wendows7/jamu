@@ -17941,24 +17941,37 @@ section.ec-instagram-section {
 
 .slide-1,
 .slide-2,
-.slide-3 {
-  height: 70vh;
+.slide-3,
+.slide-4 {
+    height: 70vh;
 }
 
 .ec-main-slider .ec-slider {
   border-radius: 30px;
 }
 .ec-main-slider .slide-1 {
-  background-image: url("../images/main-slider-banner/16.jpg");
+  background-image: url("../../img/landing-page-1.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .ec-main-slider .slide-2 {
-  background-image: url("../images/main-slider-banner/17.jpg");
+  background-image: url("../../img/landing-page-2.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+.ec-main-slider .slide-3 {
+    background-image: url("../../img/landing-page-3.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.ec-main-slider .slide-4 {
+    background-image: url("../../img/landing-page-4.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .ec-main-slider .container {
   position: absolute;

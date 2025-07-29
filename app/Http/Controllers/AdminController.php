@@ -11,6 +11,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use App\Services\PartnerSendHistoryService;
 use App\Services\StockProductService;
+use App\Services\PaymentService;
 
 class AdminController extends Controller
 {
@@ -24,10 +25,12 @@ class AdminController extends Controller
     protected $parnershipService;
     protected $partnerSendHistoryService;
     protected $stockProductService;
+    protected $paymentService;
 
     public function __construct(ProductService $productService, UserService $userService, AdminService $adminService,
                                 CategoryProductService $categoryService, OrderService $orderService, PartnershipService $partnershipService,
-                                PartnerSendHistoryService $partnerSendHistoryService, StockProductService $stockProductService)
+                                PartnerSendHistoryService $partnerSendHistoryService, StockProductService $stockProductService,
+                                PaymentService $paymentService)
     {
         $this->productService = $productService;
         $this->userService = $userService;
@@ -37,6 +40,7 @@ class AdminController extends Controller
         $this->parnershipService = $partnershipService;
         $this->partnerSendHistoryService = $partnerSendHistoryService;
         $this->stockProductService = $stockProductService;
+        $this->paymentService = $paymentService;
     }
 
     public function index()
@@ -270,5 +274,37 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Data has been updated!');
 
+    }
+
+    public function getPaymentMethod()
+    {
+        $data = $this->paymentService->getPayment();
+        $title = 'Delete Payment Method!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        $selisihMenit = $this->adminService->showMinute();
+
+        return view('dashboard.payment.index', compact('data', 'selisihMenit'));
+    }
+
+    public function updatePaymentMethod(Request $request)
+    {
+        $this->paymentService->updatePayment($request);
+
+        return redirect()->back()->with('success', 'Payment method has been updated!');
+    }
+
+    public function addPaymentMethod(Request $request)
+    {
+        $this->paymentService->addPayment($request);
+
+        return redirect()->back()->with('success', 'Payment method has been added!');
+    }
+
+    public function deletePaymentMethod($id)
+    {
+        $this->paymentService->deletePaymentById($id);
+
+        return redirect()->back()->with('success', 'Payment method has been deleted!');
     }
 }

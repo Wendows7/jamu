@@ -99,14 +99,14 @@
             <div class="container">
                 <div class="row">
                     <!-- Footer payment -->
-                    <div class="footer-bottom-right">
-                        <div class="footer-bottom-payment d-flex justify-content-center">
-                            <div class="payment-link">
-                                <img src="assets/images/icons/payment.png" alt="">
-                            </div>
+{{--                    <div class="footer-bottom-right">--}}
+{{--                        <div class="footer-bottom-payment d-flex justify-content-center">--}}
+{{--                            <div class="payment-link">--}}
+{{--                                <img src="assets/images/icons/payment.png" alt="">--}}
+{{--                            </div>--}}
 
-                        </div>
-                    </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <!-- Footer payment -->
                     <!-- Footer Copyright Start -->
                     <div class="footer-copy">

@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-md-6 ec-cms-block ec-abcms-block text-center">
                         <div class="ec-cms-block-inner">
-                            <img class="a-img" src="assets/images/offer-image/1.jpg" alt="about">
+                            <img class="a-img" src="{{asset('img/about.png')}}" alt="about">
                         </div>
                     </div>
                     <div class="col-md-6 ec-cms-block ec-abcms-block">

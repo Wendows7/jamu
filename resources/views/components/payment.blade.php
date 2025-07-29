@@ -214,9 +214,9 @@
             <div class="paypage-title">Bukti Pembayaran</div>
             <div class="paypage-info">
                 <div class="pay-method-row">
-                    <span class="pay-method-logo">
-                    <img src="{{ asset('img/BCA.png') }}" alt="logo" style="height:22px;width:auto;display:block;">
-                </span>
+{{--                    <span class="pay-method-logo">--}}
+{{--                    <img src="{{ asset('img/BCA.png') }}" alt="logo" style="height:22px;width:auto;display:block;">--}}
+{{--                </span>--}}
                     <span class="pay-method-name">
                     {{ strtoupper($paymentMethod->name ?? '-') }}
                 </span>

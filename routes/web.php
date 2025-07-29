@@ -85,6 +85,11 @@ Route::middleware('admin')->group(function () {
     Route::post('dashboard/admin/partnerships/sending/add', [AdminController::class, 'addPartnerSendHistory'])->name('admin.partnerships.sending.add');
     Route::post('dashboard/admin/partnerships/sending/update', [AdminController::class, 'sendBatchPartnership'])->name('admin.partnerships.sending.update');
 
+    Route::get('dashboard/admin/payments', [AdminController::class, 'getPaymentMethod'])->name('admin.payments');
+    Route::put('dashboard/admin/payments/update', [AdminController::class, 'updatePaymentMethod'])->name('admin.payments.update');
+    Route::post('dashboard/admin/payments/create', [AdminController::class, 'addPaymentMethod'])->name('admin.payments.create');
+    Route::delete('dashboard/admin/payments/delete/{payment}', [AdminController::class, 'deletePaymentMethod'])->name('admin.payments.delete');
+
 
 
 });

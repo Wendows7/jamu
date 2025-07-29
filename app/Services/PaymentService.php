@@ -31,4 +31,28 @@ class PaymentService
         return $this->paymentService->where('id', $id)->first();
     }
 
+    public function addPayment($request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'number' => 'required|integer',
+        ]);
+
+        return $this->paymentService->create($validatedData);
+    }
+    public function updatePayment($request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'number' => 'required|integer',
+        ]);
+
+        return $this->paymentService->where('id', $request->id)->update($validatedData);
+    }
+
+    public function deletePaymentById($id)
+    {
+        return $this->paymentService->where('id', $id)->delete();
+    }
+
 }
