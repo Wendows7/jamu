@@ -20,7 +20,7 @@
                             <h4 class="ec-footer-heading">Products</h4>
                             <div class="ec-footer-links">
                                 <ul class="align-items-center">
-                                    @foreach($categories as $value)
+                                    @foreach($products as $value)
                                     <li class="ec-footer-link"><a href="{{ route('products.search', ['slug' => $value->name]) }}">{{$value->name}}</a></li>
                                     @endforeach
 {{--                                    <li class="ec-footer-link"><a href="#">New products</a></li>--}}
