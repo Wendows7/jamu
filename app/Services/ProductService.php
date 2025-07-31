@@ -169,12 +169,12 @@ class ProductService
         if ($request->file('image_2')) {
             $validateData['image_2'] = $this->resizeAndStoreImage($request->file('image_2'));
         } else {
-            $validateData['image_2'] = 'assets/img/blank-image.jpg';
+            $validateData['image_2'] = 'dashboard/assets/img/blank-image.jpg';
         }
         if ($request->file('image_3')) {
             $validateData['image_3'] = $this->resizeAndStoreImage($request->file('image_3'));
         } else {
-            $validateData['image_3'] = 'assets/img/blank-image.jpg';
+            $validateData['image_3'] = 'dashboard/assets/img/blank-image.jpg';
         }
 
         // Create product
