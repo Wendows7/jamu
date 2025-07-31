@@ -33,7 +33,7 @@ class LoginController extends Controller
             return redirect()->route('home')->with('success', 'You are already logged in!');
         }
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->paginate(10);
         $categories = $this->categoryProductService->getAll()->take(5);
 
         return view('auth.login', compact('totalProductByCategory', 'products', 'categories'));
@@ -69,7 +69,7 @@ class LoginController extends Controller
     public function register()
     {
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->paginate(10);
         $categories = $this->categoryProductService->getAll()->take(5);
 
         return view('auth.register', compact('totalProductByCategory', 'products', 'categories'));

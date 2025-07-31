@@ -127,10 +127,11 @@ class CartController extends Controller
         $totalPrice = session('totalPrice');
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
         $categories = $this->categoryProductService->getAll()->take(5);
+        $products = $this->productService->getAllProducts()->paginate(10);
 
 
 
-        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice', 'totalProductByCategory', 'categories'));
+        return view('components.payment', compact('paymentMethod', 'orderCode', 'totalPrice', 'totalProductByCategory', 'categories', 'products'));
     }
 
     public function buyNow(Request $request)
@@ -154,8 +155,10 @@ class CartController extends Controller
         $transactionsData = $this->transactionService->getByOrderId($orderData->id);
         $paymentData = $this->paymentService->getPayment();
         $categories = $this->categoryProductService->getAll()->take(5);
+        $products = $this->productService->getAllProducts()->paginate(10);
 
-        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData', 'totalProductByCategory', 'categories'));
+
+        return view('cart.order-detail', compact('orderData', 'transactionsData', 'paymentData', 'totalProductByCategory', 'categories', 'products'));
     }
 
     public function addPaymentProof(Request $request)
