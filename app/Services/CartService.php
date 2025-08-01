@@ -33,7 +33,7 @@ class CartService
             $cart[$request->product_id] = [
                 "name" => $product->name,
                 "quantity" => $request->quantity,
-                "price" => $product->stockProduct->first()->price,
+                "price" => $product->stockProduct->where('product_id', $request->product_id)->where('size', $request->size)->first()->price,
                 "image" => $product->image,
                 'size' => $request->size,
                 'data_stock' => $this->stockProductService->getStockByProductId($product->id),

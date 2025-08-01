@@ -38,7 +38,7 @@ class UserController extends Controller
     public function getOrderByUserId()
     {
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->paginate(10);
         $ordersData = $this->orderService->getOrderDataByUserId(auth()->user()->id);
         $categories = $this->categoryProductService->getAll()->take(5);
 
@@ -89,7 +89,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->paginate(10);
         $categories = $this->categoryProductService->getAll()->take(5);
 
         return view('auth.profile', compact('user', 'totalProductByCategory', 'products', 'categories'));

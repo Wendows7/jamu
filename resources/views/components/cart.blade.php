@@ -61,7 +61,6 @@
         margin-bottom: 6px;
     }
 </style>
-
 <form action="{{route('cart.checkout')}}" method="post">
     @csrf
     <div class="ec-side-cart-overlay"></div>

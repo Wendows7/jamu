@@ -42,7 +42,7 @@ class CartController extends Controller
     public function index()
     {
         $totalProductByCategory = $this->productService->getTotalProductByCategory();
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAllProducts()->paginate(10);
         $categories = $this->categoryProductService->getAll()->take(5);
 
 
