@@ -150,7 +150,7 @@
                                             <td>
                                                 <div style="display: flex; gap: 8px; align-items: center;">
                                                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#detailModal{{ $order['order_code'] }}">Detail</button>
-                                                    @if($order['payment'] == null)
+                                                    @if($order['payment'] == null && $order['status'] !== 'cancel')
                                                         <form action="{{route('cart.orderDetail', ['orderCode' => $order['order_code']])}}" method="get">
                                                             @csrf
                                                         <button type="submit"
