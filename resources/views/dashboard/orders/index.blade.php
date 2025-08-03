@@ -37,6 +37,7 @@
                         </th>
                         <th>Order Code</th>
                         <th>Date</th>
+                        <th>Email</th>
                         <th>Total Price</th>
                         <th>Payment Method</th>
                         <th>Status</th>
@@ -51,6 +52,7 @@
                         </td>
                         <td>{{ $order['order_code'] }}</td>
                         <td>{{ $order['created_at']->timezone('Asia/Jakarta')->format('d M Y H:i') }}</td>
+                          <td>{{$order['user']->email }}</td>
                           <td>Rp {{number_format($order['total_price']) }}</td>
                           @if($order['payment'] == null)
                               <td>-</td>
