@@ -254,7 +254,7 @@
                         Pilih File
                     </label>
                     <span class="file-name" id="fileName">Belum ada file</span>
-                    <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="file-input-payment"  required>
+                    <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="file-input-payment"  required accept="image/*">
                 </div>
                 <div class="paypage-actions">
                     <button type="submit" class="paypage-btn paypage-btn-primary">Upload</button>
