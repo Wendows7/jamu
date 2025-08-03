@@ -166,7 +166,7 @@
                     <option value="partner">Partner</option>
                 </select>
             </div>
-            <a href="#" class="forgot-link">Lupa Password?</a>
+{{--            <a href="#" class="forgot-link">Lupa Password?</a>--}}
             <div class="login-actions">
                 <button class="btn-login" type="submit">REGISTER</button>
                 <button class="btn-register" type="button" onclick="window.location.href='{{route('auth.login')}}'">LOGIN</button>

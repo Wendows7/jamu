@@ -136,7 +136,7 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password..." required>
             </div>
-            <a href="#" class="forgot-link">Lupa Password?</a>
+{{--            <a href="#" class="forgot-link">Lupa Password?</a>--}}
             <div class="login-actions">
                 <button class="btn-login" type="submit">LOGIN</button>
                 <button class="btn-register" type="button" onclick="window.location.href='{{route('auth.register')}}'">REGISTER</button>
